@@ -113,6 +113,21 @@
 			<div><h3>{{testCode.imageUrl}}</h3></div>
 			<div><h3>{{testCode.name}}</h3></div>
 			<div><h3>{{testCode.password}}</h3></div>
+			<!--table循环处理-->
+			<table class="table table-striped table-hover" ng-show="imageURIList != null && imageURIList.length > 0">
+			<thead>
+				<tr>
+					<th>No</th>
+					<th>图片</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in imageURIList">
+					<td class="text-center" ng-bind="$index+1"></td>
+					<td class="text-center" ng-bind="item"></td>
+				</tr>
+			</tbody>
+		</table>
 			<div class="mui-content-padded oauth-area">
 
 			</div>
@@ -293,6 +308,7 @@
 				var init = function(){
 					$scope.param = {};
 					$scope.testCode = {};
+					$scope.imageURIList = [];
 				};
 				 
 				 // 将参数从json转成object
@@ -311,6 +327,7 @@
 	    			).success(function(data) {
 	    				// 处理成功的场合
 	    				$scope.testCode = data.result;
+	    				$scope.imageURIList = data.result.imageUrl;
 					}).error(function(err) {
 						// 处理异常的场合
 						$state.go('admin.userManage.list');
