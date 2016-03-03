@@ -107,10 +107,9 @@
 			</form>
 			<div class="mui-content-padded">
 				<button id='login' ng-click="test()" class="mui-btn mui-btn-block mui-btn-primary">登录</button>
-				<div class="link-area"><a id='reg'>注册账号</a> <span class="spliter">|</span> <a id='forgetPassword'>忘记密码</a>
+				<div class="link-area"><a id='reg' ng-click="reg()">注册账号</a> <span class="spliter">|</span> <a id='forgetPassword' ng-click="forgetPassword()">忘记密码</a>
 				</div>
 			</div>
-			<div><h3>{{testCode.imageUrl}}</h3></div>
 			<div><h3>{{testCode.name}}</h3></div>
 			<div><h3>{{testCode.password}}</h3></div>
 			<!--table循环处理-->
@@ -143,146 +142,17 @@
 				});
 			
 				$.plusReady(function() {
-					plus.screen.lockOrientation("portrait-primary");
-					var settings = app.getSettings();
-					var state = app.getState();
-					var mainPage = $.preload({
-						"id": 'main',
-						"url": 'main.html'
-					});
-					var toMain = function() {
-						$.fire(mainPage, 'show', null);
-						setTimeout(function() {
-							$.openWindow({
-								id: 'main',
-								show: {
-									aniShow: 'pop-in'
-								},
-								waiting: {
-									autoShow: false
-								}
-							});
-						}, 0);
-					};
-					//检查 "登录状态/锁屏状态" 开始
-					if (settings.autoLogin && state.token && settings.gestures) {
-						$.openWindow({
-							url: 'unlock.html',
-							id: 'unlock',
-							show: {
-								aniShow: 'pop-in'
-							},
-							waiting: {
-								autoShow: false
-							}
-						});
-					} else if (settings.autoLogin && state.token) {
-						toMain();
-					} else {
-						//第三方登录
-						var auths = {};
-						var oauthArea = doc.querySelector('.oauth-area');
-						plus.oauth.getServices(function(services) {
-							for (var i in services) {
-								var service = services[i];
-								auths[service.id] = service;
-								var btn = document.createElement('div');
-								btn.setAttribute('class', 'oauth-btn');
-								btn.authId = service.id;
-								btn.style.backgroundImage = 'url("images/' + service.id + '.png")'
-									//alert(service.id);
-									//btn.innerText = service.description + "登录";
-								oauthArea.appendChild(btn);
-							}
-							$(oauthArea).on('tap', '.oauth-btn', function() {
-								var auth = auths[this.authId];
-								var waiting = plus.nativeUI.showWaiting();
-								auth.login(function() {
-									waiting.close();
-									plus.nativeUI.toast("登录认证成功");
-									//alert(JSON.stringify(auth.authResult));
-									auth.getUserInfo(function() {
-										plus.nativeUI.toast("获取用户信息成功");
-										//alert(JSON.stringify(auth.userInfo));
-										var name = auth.userInfo.nickname || auth.userInfo.name;
-										app.createState(name, function() {
-											toMain();
-										});
-									}, function(e) {
-										plus.nativeUI.toast("获取用户信息失败：" + e.message);
-									});
-								}, function(e) {
-									waiting.close();
-									plus.nativeUI.toast("登录认证失败：" + e.message);
-								});
-							});
-						}, function(e) {
-							oauthArea.style.display = 'none';
-							plus.nativeUI.toast("获取登录认证失败：" + e.message);
-						});
-					}
 					// close splash
 					setTimeout(function() {
 						//关闭 splash
 						plus.navigator.closeSplashscreen();
 					}, 600);
 					
-
-		    
-					//检查 "登录状态/锁屏状态" 结束
-					var loginButton = doc.getElementById('login');
-					var accountBox = doc.getElementById('account');
-					var passwordBox = doc.getElementById('password');
-					var autoLoginButton = doc.getElementById("autoLogin");
-					var regButton = doc.getElementById('reg');
-					var forgetButton = doc.getElementById('forgetPassword');
-			    
-					$.enterfocus('#login-form input', function() {
-						$.trigger(loginButton, 'tap');
-					});
-					autoLoginButton.classList[settings.autoLogin ? 'add' : 'remove']('mui-active')
-					autoLoginButton.addEventListener('toggle', function(event) {
-						setTimeout(function() {
-							var isActive = event.detail.isActive;
-							settings.autoLogin = isActive;
-							app.setSettings(settings);
-						}, 50);
-					}, false);
-					regButton.addEventListener('tap', function(event) {
-						$.openWindow({
-							url: 'reg.html',
-							id: 'reg',
-							show: {
-								aniShow: 'pop-in'
-							},
-							styles: {
-								popGesture: 'hide'
-							},
-							waiting: {
-								autoShow: false
-							}
-						});
-					}, false);
-					forgetButton.addEventListener('tap', function(event) {
-						$.openWindow({
-							url: 'forget_password.html',
-							id: 'forget_password',
-							show: {
-								aniShow: 'pop-in'
-							},
-							styles: {
-								popGesture: 'hide'
-							},
-							waiting: {
-								autoShow: false
-							}
-						});
-					}, false);
 					//
 					window.addEventListener('resize', function() {
 						oauthArea.style.display = document.body.clientHeight > 400 ? 'block' : 'none';
 					}, false);
-					//
+					// 返回键按两次退出程序
 					var backButtonPress = 0;
 					$.back = function(event) {
 						backButtonPress++;
@@ -297,7 +167,7 @@
 						return false;
 					};
 				});
-				
+
 				// angularjs处理
 				//绑定模块，在html标签中定义模块名，这里定义的是myapp
 				var Testapp = angular.module("myApp", []);
@@ -319,7 +189,9 @@
 				// 登录处理
 				$scope.test = function() {
 					// 调取后台API
-					$http.post('http://127.0.0.1:8080/gzjkyApi/test/imageUrl_list.do',
+					//http://127.0.0.1:8080/gzjkyApi/test/imageUrl_list.do
+					//http://192.168.1.159:8080/gzjkyApi/test/imageUrl_list.do
+					$http.post('http://192.168.1.159:8080/gzjkyApi/test/imageUrl_list.do',
 						$scope.param, {
         				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
         							transformRequest: transform
@@ -330,10 +202,44 @@
 	    				$scope.imageURIList = data.result.imageUrl;
 					}).error(function(err) {
 						// 处理异常的场合
-						$state.go('admin.userManage.list');
+						
 					});
 				}
-				       
+				    
+				//注册页面显示
+				$scope.reg = function() {
+					$.openWindow({
+							url: 'reg.html',
+							id: 'reg',
+							show: {
+								aniShow: 'pop-in'
+							},
+							styles: {
+								popGesture: 'hide'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+				}
+				
+				// 找回密码
+				$scope.forgetPassword = function() {
+					$.openWindow({
+							url: 'forget_password.html',
+							id: 'forget_password',
+							show: {
+								aniShow: 'pop-in'
+							},
+							styles: {
+								popGesture: 'hide'
+							},
+							waiting: {
+								autoShow: false
+							}
+						});
+				}
+				
 				// 初期化处理
 				init();
 			});
