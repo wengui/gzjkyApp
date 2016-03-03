@@ -27,28 +27,32 @@
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">个人信息</h1>
 		</header>
-		<div class="mui-content">
-		
-		<div id="tabbar-with-map" class="mui-control-content" ng-include="'message.html'"></div>
-		
-		<div id="tabbar" class="mui-control-content mui-active">
-				<ul class="mui-table-view mui-table-view-chevron">
-				<li class="mui-table-view-cell mui-media">
-					<a class="mui-left" href="#account">
-						<img class="mui-media-object mui-pull-left " id="head-img" src="images/shuijiao.jpg">
-						<div class="mui-media-body">
+		<nav class="mui-bar mui-bar-tab">
+			<div ng-include="'bottombar.html'"></div>
 
-							你好，李大龙
-							<p class='mui-ellipsis'>最近登录 : 2016/02/16 17:44:48</p>
-						</div>
-					</a>
-				</li>
-			</ul>
-			<div class="title">
-				我的家庭成员
-			</div>
-			<ul class="mui-table-view" id="xy">
-				<!--<li class="mui-table-view-cell mui-media">
+		</nav>
+		<div class="mui-content">
+
+			<div id="tabbar-with-map" class="mui-control-content" ng-include="'message.html'"></div>
+
+			<div id="tabbar" class="mui-control-content mui-active">
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-left" href="#account">
+							<img class="mui-media-object mui-pull-left " id="head-img" src="images/shuijiao.jpg">
+							<div class="mui-media-body">
+
+								你好，李大龙
+								<p class='mui-ellipsis'>最近登录 : 2016/02/16 17:44:48</p>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div class="title">
+					我的家庭成员
+				</div>
+				<ul class="mui-table-view" id="xy">
+					<!--<li class="mui-table-view-cell mui-media">
 					<a href="javascript:;">
 						<img class="mui-media-object mui-pull-left" src="images/shuijiao.jpg">
 						<div class="mui-media-body">
@@ -76,83 +80,82 @@
 					</a>
 				</li>-->
 
-			</ul>
-			<div class="title">
-				我的医院医生
-			</div>
-			<ul class="mui-table-view">
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="images/shuijiao.jpg">
-						<div class="mui-media-body">
-							幸福
-							<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="images/muwu.jpg">
-						<div class="mui-media-body">
-							木屋
-							<p class='mui-ellipsis'>想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
-						<div class="mui-media-body">
-							CBD
-							<p class='mui-ellipsis'>烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-						</div>
-					</a>
-				</li>
+				</ul>
+				<div class="title">
+					我的医院医生
+				</div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" src="images/shuijiao.jpg">
+							<div class="mui-media-body">
+								幸福
+								<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" src="images/muwu.jpg">
+							<div class="mui-media-body">
+								木屋
+								<p class='mui-ellipsis'>想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
+							<div class="mui-media-body">
+								CBD
+								<p class='mui-ellipsis'>烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+							</div>
+						</a>
+					</li>
 
-			</ul>
-								<ul class="mui-table-view" style="margin-top: 25px;">
-			<li class="mui-table-view-cell">
-				<a style="text-align: center;color: #FF3B30;">
+				</ul>
+				<ul class="mui-table-view" style="margin-top: 25px;">
+					<li class="mui-table-view-cell">
+						<a style="text-align: center;color: #FF3B30;">
 						退出登录
 					</a>
-			</li>
-		</ul>
-			<div class="title">
-				我的设备
-			</div>
-			<ul class="mui-table-view">
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="images/shuijiao.jpg">
-						<div class="mui-media-body">
-							幸福
-							<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="images/muwu.jpg">
-						<div class="mui-media-body">
-							木屋
-							<p class='mui-ellipsis'>想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
-						</div>
-					</a>
-				</li>
-				<li class="mui-table-view-cell mui-media">
-					<a href="javascript:;">
-						<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
-						<div class="mui-media-body">
-							CBD
-							<p class='mui-ellipsis'>烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
-						</div>
-					</a>
-				</li>
+					</li>
+				</ul>
+				<div class="title">
+					我的设备
+				</div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" src="images/shuijiao.jpg">
+							<div class="mui-media-body">
+								幸福
+								<p class='mui-ellipsis'>能和心爱的人一起睡觉，是件幸福的事情；可是，打呼噜怎么办？</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" src="images/muwu.jpg">
+							<div class="mui-media-body">
+								木屋
+								<p class='mui-ellipsis'>想要这样一间小木屋，夏天挫冰吃瓜，冬天围炉取暖.</p>
+							</div>
+						</a>
+					</li>
+					<li class="mui-table-view-cell mui-media">
+						<a href="javascript:;">
+							<img class="mui-media-object mui-pull-left" src="images/cbd.jpg">
+							<div class="mui-media-body">
+								CBD
+								<p class='mui-ellipsis'>烤炉模式的城，到黄昏，如同打翻的调色盘一般.</p>
+							</div>
+						</a>
+					</li>
 
-			</ul>
+				</ul>
 
-
-			<!--<div class="title">
+				<!--<div class="title">
 				card（圆角列表）
 			</div>
 			<div class="mui-card" style="margin-bottom: 35px;">
@@ -188,57 +191,50 @@
 			</div>
 		</div>-->
 
+			</div>
+
 		</div>
 
-		
-				
-		</div>
-		
-			<nav class="mui-bar mui-bar-tab">
-				<div ng-include="'bottombar.html'"></div>
-				
-			</nav>
 	</body>
 	<script src="js/mui.min.js"></script>
 	<script src="js/angular/angular.min.js" type="text/javascript" charset="utf-8"></script>
 	<script>
-//		//用户登录ajax					
-//		mui.ajax('http://192.168.1.161:8080/gzjky/home/getHospitalAndDoctor.do', {
-//			//mui.ajax('http://192.168.1.161:8080/gzjky/login/login.do', {
-//			data: {
-//				username: '22323232',
-//				password: 'SDFSDFSDFSDF'
-//			},
-//			dataType: 'json', //服务器返回json格式数据
-//			type: 'post', //HTTP请求类型
-//			timeout: 100000000000, //超时时间设置为10秒；
-//			success: function(data) {
-//				//服务器返回响应，根据响应结果，分析是否登录成功；
-//				var hosDocInfoList = data;
-//				if (hosDocInfoList != null && hosDocInfoList.length > 0) {
-//					var str = "";
-//					for (var i = 0; i < hosDocInfoList.length; i++) {
-//						var text = '';
-//						var bind_type = hosDocInfoList[i].bind_type;
-//						//text = hosDocInfoList[i].hName + "(" + hosDocInfoList[i].dName + ")";
-//						str += "<li class=''>" + "医院：" + hosDocInfoList[i].hName + "</li>";
-//						str += "<li class=''>" + "医生：" + hosDocInfoList[i].dName + "</li>";
-//					}
-//					var info = document.getElementById("xy");
-//					info.innerHTML = str;
-//				}
-//				console.log(data.token);
-//				console.log("success");
-//				console.log(data.result);
-//			},
-//			error: function(xhr, type, errorThrown) {
-//				//异常处理；
-//				console.log("failure");
-//				console.log(type);
-//				//return callback('用户名或密码错误');
-//			}
-//		});
-		
+		//		//用户登录ajax					
+		//		mui.ajax('http://192.168.1.161:8080/gzjky/home/getHospitalAndDoctor.do', {
+		//			//mui.ajax('http://192.168.1.161:8080/gzjky/login/login.do', {
+		//			data: {
+		//				username: '22323232',
+		//				password: 'SDFSDFSDFSDF'
+		//			},
+		//			dataType: 'json', //服务器返回json格式数据
+		//			type: 'post', //HTTP请求类型
+		//			timeout: 100000000000, //超时时间设置为10秒；
+		//			success: function(data) {
+		//				//服务器返回响应，根据响应结果，分析是否登录成功；
+		//				var hosDocInfoList = data;
+		//				if (hosDocInfoList != null && hosDocInfoList.length > 0) {
+		//					var str = "";
+		//					for (var i = 0; i < hosDocInfoList.length; i++) {
+		//						var text = '';
+		//						var bind_type = hosDocInfoList[i].bind_type;
+		//						//text = hosDocInfoList[i].hName + "(" + hosDocInfoList[i].dName + ")";
+		//						str += "<li class=''>" + "医院：" + hosDocInfoList[i].hName + "</li>";
+		//						str += "<li class=''>" + "医生：" + hosDocInfoList[i].dName + "</li>";
+		//					}
+		//					var info = document.getElementById("xy");
+		//					info.innerHTML = str;
+		//				}
+		//				console.log(data.token);
+		//				console.log("success");
+		//				console.log(data.result);
+		//			},
+		//			error: function(xhr, type, errorThrown) {
+		//				//异常处理；
+		//				console.log("failure");
+		//				console.log(type);
+		//				//return callback('用户名或密码错误');
+		//			}
+		//		});
 		mui.init({
 			swipeBack: true //启用右滑关闭功能
 		});
@@ -246,22 +242,17 @@
 			var info = document.getElementById("xy");
 			info.innerHTML = "当前选中的为：";
 		});
-		
 		// angularjs处理
-				//绑定模块，在html标签中定义模块名，这里定义的是myapp
-				var Testapp = angular.module("myApp", []);
-				// 绑定controller,这里在div中定义的controller是myController
-				Testapp.controller("userCtrl", function ($scope, $http) {
-				
-				// 初期化处理
-				var init = function(){
-					
-				};
-				
-				// 初期化处理
-				init();
-			});
-		
+		//绑定模块，在html标签中定义模块名，这里定义的是myapp
+		var Testapp = angular.module("myApp", []);
+		// 绑定controller,这里在div中定义的controller是myController
+		Testapp.controller("userCtrl", function($scope, $http) {
+			// 初期化处理
+			var init = function() {
+			};
+			// 初期化处理
+			init();
+		});
 	</script>
 
 </html>
