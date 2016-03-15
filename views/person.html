@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			.title {
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+		</style>
+	</head>
+
+	<body ng-app="myApp" ng-controller="userCtrl">
+
+		<div class="mui-content">
+
+			<div id="tabbar-with-map" class="mui-control-content" ng-include="'message.html'"></div>
+
+			<div id="tabbar" class="mui-control-content mui-active">
+				<ul class="mui-table-view mui-table-view-chevron">
+					<li class="mui-table-view-cell mui-media">
+						<a class="mui-left" href="#account">
+							<img class="mui-media-object mui-pull-left " id="head-img" src="../images/shuijiao.jpg">
+							<div class="mui-media-body">
+
+								你好，李大龙
+								<p class='mui-ellipsis'>最近登录 : 2016/02/16 17:44:48</p>
+							</div>
+						</a>
+					</li>
+				</ul>
+				<div class="title">
+					我的家庭成员
+				</div>
+				<ul class="mui-table-view" id="xy">
+
+				</ul>
+				<div class="title">
+					我的医院医生
+				</div>
+				<ul class="mui-table-view" id="doc">
+
+				</ul>
+
+				<div class="title" >
+					我的设备
+				</div>
+				<ul class="mui-table-view" id="eqp">
+					
+				</ul>
+				<ul class="mui-table-view" style="margin-top: 25px;">
+					<li class="mui-table-view-cell">
+						<a style="text-align: center;color: #FF3B30;">
+						退出登录
+					</a>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+		mui.plusReady(function() {
+			//获取医院医生ajax				
+			mui.ajax(API_ADDRESS + 'person/getHospitalAndDoctor.do', {
+				//mui.ajax('http://192.168.1.161:8080/gzjky/login/login.do', {
+				data: {
+					username: '22323232',
+					password: 'SDFSDFSDFSDF'
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 5000, //超时时间设置为10秒；
+				success: function(data) {
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					var hosDocInfoList = data.result;
+					console.log(hosDocInfoList.length);
+					if (hosDocInfoList != null && hosDocInfoList.length > 0) {
+						var str = "";
+						for (var i = 0; i < hosDocInfoList.length; i++) {
+							var text = '';
+							var bind_type = hosDocInfoList[i].bind_type;
+							//text = hosDocInfoList[i].hName + "(" + hosDocInfoList[i].dName + ")";
+							str += "<li class='mui-table-view-cell mui-media'>" + hosDocInfoList[i].hName +  "：" +hosDocInfoList[i].dName+"</li>";
+
+						}
+						var info = document.getElementById("doc");
+						info.innerHTML = str;
+					}
+					console.log(str);
+					console.log("success");
+					console.log(data.result);
+				},
+				error: function(xhr, type, errorThrown) {
+					//异常处理；
+					console.log("failure");
+					console.log(type);
+					//return callback('用户名或密码错误');
+				}
+			});
+			
+			//获取设备				
+			mui.ajax(API_ADDRESS + 'person/getEquipment.do', {
+				//mui.ajax('http://192.168.1.161:8080/gzjky/login/login.do', {
+				data: {
+					username: '22323232',
+					password: 'SDFSDFSDFSDF'
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 5000, //超时时间设置为10秒；
+				success: function(data) {
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					var EquipmentList = data.result;
+					console.log(EquipmentList.length);
+					if (EquipmentList != null && EquipmentList.length > 0) {
+						var str = "";
+						for (var i = 0; i < EquipmentList.length; i++) {
+
+							str += "<li class='mui-table-view-cell mui-media'>"
+							//设备名字
+							str +=EquipmentList[i].deviceVersionName ;
+							//详情图标
+							str +="<a class='mui-action-back mui-icon mui-icon-bars mui-pull-right'></a>";
+							
+							str +="</li>";
+							
+						}
+						var info = document.getElementById("eqp");
+						info.innerHTML = str;
+					}
+					console.log(str);
+					console.log("success");
+					console.log(data.result);
+				},
+				error: function(xhr, type, errorThrown) {
+					//异常处理；
+					console.log("failure");
+					console.log(type);
+					//return callback('用户名或密码错误');
+				}
+			});
+		});
+	</script>
+
+</html>
