@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<style>
+			.title {
+				margin: 20px 15px 7px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+		</style>
+	</head>
+
+	<body ng-app="myApp" id="myApp" ng-controller="myController">
+		<header class="mui-bar mui-bar-nav">
+
+			<a class="mui-icon mui-icon-addequiment mui-pull-right" onclick='pageJump("reference.html")'></a>
+			<h1 class="mui-title">我的设备</h1>
+		</header>
+		<div class="mui-content">
+			<ul class="mui-table-view" ng-repeat="item in equList">
+				<li class="mui-table-view-cell mui-media">
+					<a href="javascript:;">
+						<img class="mui-media-equipment-object mui-pull-left" ng-src="{{item.image}}"></imag>
+						<div class="mui-media-body mui-media-equipment-cell">
+							<span class='mui-titles'>设备类型:</span>
+							<p class='mui-ellipsis' ng-bind="item.versionname"></p>
+							<span class='mui-titles'>设备编号:</span>
+							<p class='mui-ellipsis' ng-bind="item.num"></p>
+							<span class='mui-titles'>设备别名:</span>
+							<p class='mui-ellipsis' ng-if="item.nickname!=''" ng-bind="item.nickname"></p>
+							<p class='mui-ellipsis' ng-if="item.nickname==''">无</p>
+							<span class='mui-titles'>SIM卡号:</span>
+							<p class='mui-ellipsis' ng-if="item.sim!=''" ng-bind="item.sim"></p>
+							<p class='mui-ellipsis' ng-if="item.sim==''">无</p>
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/app.js"></script>
+	<script src="../js/angular/angular.min.js"></script>
+	<script>
+				mui.init({
+					swipeBack: true //启用右滑关闭功能
+				});
+				mui.plusReady(function() {
+					
+					//通过DOM操作获取app对象
+					var element = angular.element(document.getElementById("myApp"));
+					//得到app对象，可以获取app的controller
+					var controller = element.controller();
+					//得到app对象，可以获取app的$scope
+					var scope = element.scope();
+					// 调用angularjs方法，初期化显示
+					scope.getequipment(plus);
+				});
+		
+				// angularjs处理
+				//绑定模块，在html标签中定义模块名，这里定义的是myapp
+				var Testapp = angular.module("myApp", []);
+				// 绑定controller,这里在div中定义的controller是myController
+				Testapp.controller("myController", function ($scope, $http) {
+				
+				// 初期化处理
+				var init = function(){
+				};
+				 
+				 // 将参数从json转成object
+				 var transform = function(data){
+        				return mui.param(data);
+    				}
+
+
+				// 登录处理
+				$scope.getequipment = function(obj) {
+					
+					obj.nativeUI.showWaiting("正在加载");
+					console.log("scope.getequipment start");
+					// 调取后台API
+					$http.post(API_ADDRESS+'equipment/queryEquipment.do',{cache: true,timeout: 1}
+	    			).success(function(data) {
+	    			// 处理成功的场合
+	    			console.log("angularjs数据取得成功！");
+	    			//服务器返回响应，根据响应结果，分析是否登录成功；
+	    			$scope.equList = [];
+	    			$scope.equList = data.result.equipmentList;
+	    			// 图片加载路径修正
+	    			for(var i=0;i<$scope.equList.length;i++){
+	    				$scope.equList[i].image = '..' + $scope.equList[i].image;
+	    				
+	    			}
+	    			plus.nativeUI.closeWaiting();
+
+					}).error(function(err) {
+						plus.nativeUI.closeWaiting();
+						mui.alert('数据服务器链接失败', '错误', function() {
+					
+						});
+						// 处理异常的场合
+						console.log("scope.getequipment error");
+					});
+				}
+				
+				init();
+				});
+	</script>
+
+</html>
