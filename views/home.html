@@ -8,7 +8,8 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/mui.css">
+		<link rel="stylesheet" href="../css/home.css">
 		<style>
 			html,
 			body {
@@ -19,42 +20,44 @@
 
 	<body>
 		<header class="mui-bar mui-bar-nav">
-			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-			<h1 id="title" class="mui-title">主页</h1>
+			<a id="bindEqp" class="mui-icon mui-icon-addequiment mui-pull-right" onclick='pageJump("equipment-bind.html")' style="visibility: hidden;"></a>
+			<h1 id="title" class="mui-title">健康</h1>
+			<span id="currentUser" class="mui-icon mui-icon-person " style="font-size: 16px;color:white;line-height: 20px;padding-top: 10px;">李大龙</span>
 		</header>
+
 		<nav class="mui-bar mui-bar-tab">
-			<a id="defaultTab" class="mui-tab-item mui-active" href="person.html">
+			<a id="defaultTab" class="mui-tab-item mui-active" href="homeDetail.html">
 				<span class="mui-icon mui-icon-home"></span>
 				<span class="mui-tab-label">健康</span>
 			</a>
 			<a class="mui-tab-item" href="terminal.html">
-				<span class="mui-icon mui-icon-email"><span class="mui-badge">9</span></span>
+				<span class="mui-icon mui-icon-navi"></span>
 				<span class="mui-tab-label">终端</span>
 			</a>
-			<a class="mui-tab-item" href="list.html">
-				<span class="mui-icon mui-icon-email"><span class="mui-badge">9</span></span>
-				<span class="mui-tab-label">切换</span>
+			
+			<a class="mui-tab-item" href="list.html" style="overflow: visible;">
+				<span class="mui-icon mui-icon-changeuser" style="padding-top:12px;top:-25px;position:relative;background: url(../images/userchange.png) ;overflow:visible;width: 55px;height: 55px;"></span>
 			</a>
-			<a class="mui-tab-item" href="device.html">
-				<span class="mui-icon mui-icon-contact"></span>
+			<a class="mui-tab-item" href="equipment.html">
+				<span class="mui-icon mui-icon-device"></span>
 				<span class="mui-tab-label">设备</span>
 			</a>
 			<a class="mui-tab-item" href="person.html">
-				<span class="mui-icon mui-icon-gear"></span>
+				<span class="mui-icon mui-icon-contact"></span>
 				<span class="mui-tab-label">个人</span>
 			</a>
 		</nav>
 		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			 //mui初始化
 			mui.init();
-//			var subpages = ['health.html', '', '', ''];
-//			var subpagesId = ['health.html', 'terminal.html', 'device.html', 'person.html'];
-			var subpages = ['person.html', '', '', ''];
-			var subpagesId = ['person.html', 'terminal.html', 'device.html', 'health.html'];
+			var subpages = ['homeDetail.html', '', '', '', ''];
+			var subpagesId = ['homeDetail.html', 'terminal.html', 'userchange.html', 'equipment.html', 'person.html'];
 			var subpage_style = {
 				top: '45px',
-				bottom: '51px'
+				bottom: '51px', 
+				background: 'transparent'
 			};
 			
 			var aniShow = {};
@@ -62,7 +65,7 @@
 			 //创建子页面，首个选项卡页面显示，其它均隐藏；
 			mui.plusReady(function() {
 				var self = plus.webview.currentWebview();
-				for (var i = 0; i < 4; i++) {
+				for (var i = 0; i < 5; i++) {
 					var temp = {};
 					var sub = plus.webview.create(subpages[i], subpagesId[i], subpage_style);
 					if (i > 0) {
@@ -71,7 +74,7 @@
 						temp[subpages[i]] = "true";
 						mui.extend(aniShow,temp);
 					}
-					self.append(sub);
+					self.append(sub); 
 				}
 			});
 			 //当前激活选项
@@ -101,6 +104,15 @@
 					mui.extend(aniShow,temp);
 					currentWebview.show(targetTab,"fade-in",300);
 				}
+				
+				if(targetTab == "equipment.html"){
+					console.log("targetTab1:"+targetTab);
+					document.getElementById("bindEqp").style.visibility = "visible";
+				}else{
+					console.log("targetTab2:"+targetTab);
+					document.getElementById("bindEqp").style.visibility = "hidden";
+				}
+				
 				//隐藏当前;
 				plus.webview.hide(activeTab);
 				//更改当前活跃的选项卡

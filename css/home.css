@@ -1,0 +1,22 @@
+.mui-icon-navi:before
+{
+    content: '\e691';
+}
+
+.mui-icon-device:before
+{
+    content: '\e682';
+}
+
+.mui-icon-changeuser:before
+{
+    content: '\e730';
+
+}
+.mui-icon-addequiment:before{
+	content:'\E747';
+	color: white;
+}
+.mui-plus.mui-android .mui-bar-nav~.mui-content{
+	padding-top: 25px;
+}

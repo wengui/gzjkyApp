@@ -9,7 +9,7 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<!--标准mui.css-->
-		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/mui.css">
 		<!--App自定义的css-->
 		<style>
 			.mui-input-row label{
@@ -75,14 +75,11 @@
 					// 调用angularjs方法，初期化显示
 					//$scope.init();
 					
-				// 提交
-				document.getElementById("confirmBtn").addEventListener("tap", function() {
 					// 设备序列号为空
 					if('' == scope.deviceSid){
 						plus.nativeUI.toast("设备序列号不能为空！");
 						return false;
 					}
-					alert(scope.deviceBindCode);
 					// 设备绑定码
 					if('' == scope.deviceBindCode){
 						plus.nativeUI.toast("设备绑定码不能为空！");
@@ -148,6 +145,7 @@
 	    				// 该设备已绑定一个账户
 	    				plus.nativeUI.toast("该设备已绑定一个账户");
 	    			}else if(status == '5'){
+
 		    			mui.openWindow({
 							url: 'equipment.html',
 							id: 'equipment.html',
