@@ -54,7 +54,7 @@ var API_ADDRESS = 'http://192.168.1.165:8080/gzjkyApi/'; //定义了常量
 						//当前patientid
 						localStorage.setItem('patientID', result.patientID);
 						//用户名
-						localStorage.setItem('user', Jresult.user);
+						localStorage.setItem('user', result.user);
 						
 						console.log("登录成功");
 						return owner.createState(loginInfo.account, callback);
