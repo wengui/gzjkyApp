@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<!--App自定义的css-->
+		<style>
+			.mui-input-row label{
+				padding: 11px 5px;
+			}
+		</style>
+	</head>
+
+	<body ng-app="equipment-bind-App" id="equipment-bind-App" ng-controller="equipment-bind-Controller">
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" ></a>
+			<h1 class="mui-title">设备绑定</h1>
+		</header>
+		<div class="mui-content">
+			<div class="" style="margin: 0px;">
+				<form class="mui-input-group">
+					<div class="mui-input-row">
+						<label class="mui-text-right" >设备序列号：</label>
+						<input type="text" class="mui-input-clear" ng-model="deviceSid" placeholder="设备序列号">
+					</div>
+
+					<div class="mui-input-row">
+						<label class="mui-text-right">设备绑定码：</label>
+						<input type="text" class="mui-input-clear" ng-model="deviceBindCode" placeholder="设备绑定码">
+					</div>
+					<div class="mui-input-row">
+						<label class="mui-text-right">设备别名：</label>
+						<input type="text" class="mui-input-clear" ng-model="deviceNickname" placeholder="设备别名">
+					</div>
+					<div class="mui-button-row">
+						<button type="button" class="mui-btn mui-btn-primary" id="confirmBtn" >提交</button>&nbsp;&nbsp;
+					</div>
+				</form>
+			</div>
+		</div>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/app.js"></script>
+		<script src="../js/angular/angular.min.js"></script>
+		<script>
+			mui.init({
+				swipeBack: true //启用右滑关闭功能
+			});
+			
+			mui.plusReady(function() {
+					
+					plus.nativeUI.showWaiting("正在加载");
+					// 数据加载
+					addBtnEventListner();
+					
+					// 加载完成
+					plus.nativeUI.closeWaiting();
+
+				});
+				
+				//添加按钮监听
+			function addBtnEventListner() {
+				//通过DOM操作获取app对象
+					var element = angular.element(document.getElementById("equipment-bind-App"));
+					//得到app对象，可以获取app的controller
+					var controller = element.controller();
+					//得到app对象，可以获取app的$scope
+					var scope = element.scope();
+					// 调用angularjs方法，初期化显示
+					//$scope.init();
+					
+				// 提交
+				document.getElementById("confirmBtn").addEventListener("tap", function() {
+					// 设备序列号为空
+					if('' == scope.deviceSid){
+						plus.nativeUI.toast("设备序列号不能为空！");
+						return false;
+					}
+					alert(scope.deviceBindCode);
+					// 设备绑定码
+					if('' == scope.deviceBindCode){
+						plus.nativeUI.toast("设备绑定码不能为空！");
+						return false;
+					}
+					
+					// 提交处理
+					scope.equipmentBind(plus);
+					
+				}, false);
+			}
+			
+				
+				// angularjs处理
+				//绑定模块，在html标签中定义模块名，这里定义的是equipment-App
+				var Testapp = angular.module("equipment-bind-App", []);
+				// 绑定controller,这里在div中定义的controller是equipment-Controller
+				Testapp.controller("equipment-bind-Controller", function ($scope, $http) {
+				
+				// 初期化处理
+				var init = function(){
+					$scope.deviceSid ="";
+					$scope.deviceBindCode="";
+					$scope.deviceNickname="";
+				};
+				 
+				 // 将参数从json转成object
+				 var transform = function(data){
+        				return mui.param(data);
+    				}
+
+				// 设备绑定
+				$scope.equipmentBind = function(plus) {
+					
+					$scope.param = {};
+					$scope.param.deviceSid = $scope.deviceSid;
+					//$scope.param.deviceBindCode = $scope.deviceBindCode;
+					//$scope.param.deviceNickname = $scope.deviceNickname;
+					plus.nativeUI.showWaiting("正在加载");
+					console.log("scope.getequipment start");
+					// 调取后台API
+					$http.post(API_ADDRESS+'equipment/equipmentBind.do',
+					$scope.param, 
+					{
+        				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+        				transformRequest: transform
+    				}
+	    			).success(function(data) {
+	    			// 处理成功的场合
+	    			console.log("angularjs数据取得成功！");
+	    			//服务器返回响应，根据响应结果，分析是否登录成功；
+	    			var status = data.result.state;
+	    			if(status == '1'){
+	    				// 序列号不存在
+	    				plus.nativeUI.toast("序列号不存在");
+	    			}else if(status == '2'){
+	    				//	该设备已绑定两个账户
+	    				plus.nativeUI.toast("该设备已绑定两个账户");
+	    			}else if(status == '3'){
+	    				// 你已经绑定过该设备
+	    				plus.nativeUI.toast("你已经绑定过该设备");
+	    			}else if(status == '4'){
+	    				// 该设备已绑定一个账户
+	    				plus.nativeUI.toast("该设备已绑定一个账户");
+	    			}else if(status == '5'){
+		    			mui.openWindow({
+							url: 'equipment.html',
+							id: 'equipment.html',
+							waiting: {
+								autoShow: false //自动显示等待框，默认为true
+							}
+						});
+						// 清空输入框的值
+						$scope.deviceSid ="";
+						$scope.deviceBindCode="";
+						$scope.deviceNickname="";
+	    				// 绑定成功
+	    				plus.nativeUI.toast("绑定成功");
+	    				
+	    			}else{
+	    				// 绑定失败
+	    				plus.nativeUI.toast("绑定失败");
+	    			}
+	    			plus.nativeUI.closeWaiting();
+
+					}).error(function(err) {
+						plus.nativeUI.closeWaiting();
+						mui.alert('数据服务器链接失败', '错误', function() {
+					
+						});
+						// 处理异常的场合
+						console.log("scope.getequipment error");
+					});
+				}
+				
+				init();
+				});
+		</script>
+	</body>
+
+</html>
