@@ -11,7 +11,7 @@
 		"72": "icon.png"
 	},
 	"fullscreen":false,
-	"launch_path": "index.html",/*必选，应用的入口页面，默认为根目录下的index.html；也可以是网络地址，网络地址必须以http://或https://开头*/
+	"launch_path": "views/home.html",/*必选，应用的入口页面，默认为根目录下的index.html；也可以是网络地址，网络地址必须以http://或https://开头*/
 	"developer": {
 		"email": "",/*可选，开发者名称*/
 		"name": "",/*可选，开发者邮箱地址*/
@@ -59,7 +59,7 @@
 		},
 		"Navigator":{
 			"description": "浏览器信息"
-		}
+		},"Push":{}
 	},
 	"plus": {
 		"popGesture": "close",/*设置应用默认侧滑返回关闭Webview窗口，none为无侧滑返回功能，hide为侧滑隐藏Webview窗口。参考ask.dcloud.net.cn/article/102*/
@@ -69,7 +69,7 @@
 		},
 		"runmode": "normal",/*两个值，liberate或normal，前者在应用安装时释放资源，后者不需要释放资源*/
 		"signature": "Sk9JTiBVUyBtYWlsdG86aHIyMDEzQGRjbG91ZC5pbw==",/*可选，保留给应用签名，暂不使用*/
-		"distribute": {
+		"distribute": {"plugins":{"push":{"igexin":{"appid":"CheMtfOtG48k8QLXt7CdR","appkey":"YoN2xo5o7463N0wqGFkhF8","appsecret":"UqpuphzrSuA7KRmwA4CqI6"}}},
 			"debug": "",/*可选，是否为debug模式，可取值：true表示debug模式运行，false表示release模式运行，默认值为false*/
 			"apple": {
 				"appid": "",/*iOS必选，苹果开发网站申请的appid，如com.dheaven.hbuilder*/
@@ -84,7 +84,7 @@
 				"keystore": "",/*Android必选，打包证书文件*/
 				"password": "",/*Android必选，打包证书密码*/
 				"aliasname": "",/*Android必选，打包证书别名*/
-				"permissions": ["<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>", "<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>", "<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>", "<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>", "<uses-permission android:name=\"android.permission.VIBRATE\"/>", "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>", "<uses-permission android:name=\"android.permission.CALL_PHONE\"/>", "<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>", "<uses-feature android:name=\"android.hardware.camera\"/>", "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>", "<uses-permission android:name=\"android.permission.CAMERA\"/>"]
+				"permissions": ["<uses-permission android:name=\"android.permission.RECORD_AUDIO\"/>","<uses-permission android:name=\"android.permission.CHANGE_NETWORK_STATE\"/>","<uses-permission android:name=\"android.permission.MODIFY_AUDIO_SETTINGS\"/>","<uses-permission android:name=\"android.permission.GET_TASKS\"/>","<uses-permission android:name=\"android.permission.READ_PHONE_STATE\"/>","<uses-permission android:name=\"android.permission.CHANGE_WIFI_STATE\"/>","<uses-permission android:name=\"android.permission.VIBRATE\"/>","<uses-permission android:name=\"android.permission.READ_LOGS\"/>","<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>","<uses-permission android:name=\"android.permission.CALL_PHONE\"/>","<uses-permission android:name=\"android.permission.ACCESS_WIFI_STATE\"/>","<uses-feature android:name=\"android.hardware.camera\"/>","<uses-permission android:name=\"android.permission.RECEIVE_USER_PRESENT\"/>","<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>","<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\"/>","<uses-permission android:name=\"android.permission.CAMERA\"/>"]
 				/*使用 Native.js 调用原生安卓 API 需要申请的系统权限，用户可以添加多个权限的字符串*/
 			},
 			"orientation": ["portrait-primary", "landscape-primary", "portrait-secondary", "landscape-secondary"],/*必选*/
@@ -1033,6 +1033,126 @@
 				"refer": [
 					"reg.html",
 					"forget_password.html"
+				],
+				"priority": 0
+			},
+			"home.html": {
+				"resources": [
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.css",
+					"homeDetail.html",
+					"css/home.css",
+					"images/userchange.png",
+					"images/yuantiao.jpg",
+					"images/cbd.jpg",
+					"images/muwu.jpg",
+					"images/shuijiao.jpg"
+				],
+				"refer": [
+					"person.html"
+				],
+				"priority": 0
+			},
+			"homeDetail.html": {
+				"resources": [
+					"css/app.css",
+					"css/mui.min.css",
+					"images/cbd.jpg",
+					"images/muwu.jpg",
+					"images/yuantiao.jpg",
+					"images/shuijiao.jpg",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"js/app.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"person.html": {
+				"resources": [
+					"message.html",
+					"images/cbd.jpg",
+					"images/muwu.jpg",
+					"bottombar.html",
+					"images/shuijiao.jpg",
+					"js/angular/angular.min.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"views/person.html": {
+				"resources": [
+					"js/app.js",
+					"css/mui.min.css",
+					"images/shuijiao.jpg",
+					"js/mui.min.js"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"views/home.html": {
+				"resources": [
+					"css/home.css",
+					"images/userchange.png",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.css",
+					"views/homeDetail.html",
+					"js/app.js"
+				],
+				"refer": [
+					"views/person.html",
+					"views/equipment.html",
+					"views/equipment-bind.html"
+				],
+				"priority": 0
+			},
+			"views/homeDetail.html": {
+				"resources": [
+					"images/cbd.jpg",
+					"js/app.js",
+					"images/muwu.jpg",
+					"images/yuantiao.jpg",
+					"css/app.css",
+					"css/mui.min.css",
+					"images/shuijiao.jpg",
+					"js/mui.min.js",
+					"fonts/mui.ttf"
+				],
+				"refer": [],
+				"priority": 0
+			},
+			"views/equipment.html": {
+				"resources": [
+					"gzjky/images/device/device_notfount.png",
+					"js/angular/angular.min.js",
+					"gzjky/images/device/TE-8000Y3.png",
+					"css/app.css",
+					"fonts/mui.ttf",
+					"js/app.js",
+					"js/mui.min.js",
+					"css/mui.min.css"
+				],
+				"refer": [
+					"views/equipment-bind.html"
+				],
+				"priority": 0
+			},
+			"views/equipment-bind.html": {
+				"resources": [
+					"js/app.js",
+					"js/mui.min.js",
+					"fonts/mui.ttf",
+					"css/mui.min.css",
+					"js/angular/angular.min.js",
+					"css/mui.css"
+				],
+				"refer": [
+					"views/home.html"
 				],
 				"priority": 0
 			}
