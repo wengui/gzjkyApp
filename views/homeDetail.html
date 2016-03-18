@@ -9,116 +9,204 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 		<!--标准mui.css-->
-		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/mui.css">
 		<!--App自定义的css-->
 		<link rel="stylesheet" type="text/css" href="../css/app.css" />
+		<style>
+			.mui-bar
+			{
+				position: relative;
+			    height: 80px;
+			    background-color: white;
+			    margin-top: 10px;
+			}
+			.mui-bar-tab
+			{
+			    bottom: 0;
+			    display: table;
+			    width: 100%;
+			    padding: 0;
+			    table-layout: fixed;
+			    border-top: 0;
+			    border-bottom: 0;
+			    -webkit-touch-callout: none;
+			}
+			.mui-icon{
+				color: #209153;
+				
+			}
+			.mui-bar-tab .mui-tab-item .mui-tab-item.mui-active
+			{
+			    color: #209153;
+			}
+			.mui-bar-tab .mui-tab-item.mui-active
+			{
+			    color: orange;
+			}
+			.mui-bar-tab .mui-tab-item .mui-icon ~ .mui-tab-label
+			{
+			    font-size: 11px;
+			
+			    display: block;
+			    overflow: hidden;
+				color:#555555;
+				font-size: 13px;
+				font-weight:bold;
+			    text-overflow: ellipsis;
+			}
+			.mui-icon-advice:before
+			{
+			    content: '\e66e';
+			}
+			.mui-icon-heart:before
+			{
+			    content: '\e67b';
+			}
+			.mui-icon-level:before
+			{
+			    content: '\e635';
+			}
+			.mui-icon-blood:before
+			{
+			    content: '\e443';
+			}
+			.mui-table-view.mui-grid-view {
+			    margin-top:10px;
+			}
+			.mui-grid-view.mui-grid-9 
+			{
+				
+    			border-radius: 5px;
+			}
+			.mui-grid-view.mui-grid-9 .mui-table-view-cell {
+				border-top: 1px solid #209153;
+				border-left: 1px solid #209153;
+			    border-right: 1px solid #209153;
+			    border-bottom: 1px solid #209153;
+			    border-radius: 5px;
+			}
+			.mui-icon-middle{
+				border-style: solid;
+				border-width: 2px;
+				border-radius: 5px;
+				padding: 5px;
+				top:0;
+				width: auto;
+				height: auto;
+			}
+			.label-result{
+				font-size:15px;
+				color:#555555;
+				font-weight:bold;
+			}
+		</style>
 	</head>
 
 	<body>
-		<div id="slider" class="mui-slider">
-			<div class="mui-slider-group mui-slider-loop">
-				<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-				<div class="mui-slider-item mui-slider-item-duplicate">
-					<a href="#">
-						<img src="../images/yuantiao.jpg">
-					</a>
+		<div class="mui-content">
+			<div id="slider" class="mui-slider">
+				<div class="mui-slider-group mui-slider-loop">
+					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
+					<div class="mui-slider-item mui-slider-item-duplicate">
+						<a href="#">
+							<img src="../images/yuantiao.jpg">
+						</a>
+					</div>
+					<!-- 第一张 -->
+					<div class="mui-slider-item">
+						<a href="#">
+							<img src="../images/shuijiao.jpg">
+						</a>
+					</div>
+					<!-- 第二张 -->
+					<div class="mui-slider-item">
+						<a href="#">
+							<img src="../images/muwu.jpg">
+						</a>
+					</div>
+					<!-- 第三张 -->
+					<div class="mui-slider-item">
+						<a href="#">
+							<img src="../images/cbd.jpg">
+						</a>
+					</div>
+					<!-- 第四张 -->
+					<div class="mui-slider-item">
+						<a href="http://127.0.0.1:8020/example/slider-default.html#">
+							<img src="../images/yuantiao.jpg">
+						</a>
+					</div>
+					<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
+					<div class="mui-slider-item mui-slider-item-duplicate">
+						<a href="#">
+							<img src="../images/shuijiao.jpg">
+						</a>
+					</div>
 				</div>
-				<!-- 第一张 -->
-				<div class="mui-slider-item">
-					<a href="#">
-						<img src="../images/shuijiao.jpg">
-					</a>
-				</div>
-				<!-- 第二张 -->
-				<div class="mui-slider-item">
-					<a href="#">
-						<img src="../images/muwu.jpg">
-					</a>
-				</div>
-				<!-- 第三张 -->
-				<div class="mui-slider-item">
-					<a href="#">
-						<img src="../images/cbd.jpg">
-					</a>
-				</div>
-				<!-- 第四张 -->
-				<div class="mui-slider-item">
-					<a href="http://127.0.0.1:8020/example/slider-default.html#">
-						<img src="../images/yuantiao.jpg">
-					</a>
-				</div>
-				<!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-				<div class="mui-slider-item mui-slider-item-duplicate">
-					<a href="#">
-						<img src="../images/shuijiao.jpg">
-					</a>
+				<div class="mui-slider-indicator">
+					<div class="mui-indicator mui-active"></div>
+					<div class="mui-indicator"></div>
+					<div class="mui-indicator"></div>
+					<div class="mui-indicator"></div>
 				</div>
 			</div>
-			<div class="mui-slider-indicator">
-				<div class="mui-indicator mui-active"></div>
-				<div class="mui-indicator"></div>
-				<div class="mui-indicator"></div>
-				<div class="mui-indicator"></div>
-			</div>
+			<nav class="mui-bar mui-bar-tab">
+				<a id="defaultTab" class="mui-tab-item mui-active " href="homeDetail.html">
+					<span class="mui-icon mui-icon-advice" style="border-style: solid;border-width:2px;border-radius:5px;padding:5px;top:0;width: auto;height: auto;margin-top: 5px"></span>
+					<span class="mui-tab-label">医生医嘱</span>
+				</a>
+				<a class="mui-tab-item" href="terminal.html">
+					<span class="mui-icon mui-icon-chatboxes" style="border-style: solid;border-width:2px;border-radius:5px;padding:5px;top:0;width: auto;height: auto;margin-top: 5px"></span>
+					<span class="mui-tab-label">最新咨询</span>
+				</a>
+				<a class="mui-tab-item" href="equipment.html">
+					<span class="mui-icon mui-icon-heart" style="border-style: solid;border-width:2px;border-radius:5px;padding:5px;top:0;width: auto;height: auto;margin-top: 5px"></span>
+					<span class="mui-tab-label">心电血压</span>
+				</a>
+				<a class="mui-tab-item" href="person.html">
+					<span class="mui-icon mui-icon-level" style="border-style: solid;border-width:2px;border-radius:5px;padding:5px;top:0;width: auto;height: auto;margin-top: 5px"></span>
+					<span class="mui-tab-label">血压等级</span>
+				</a>
+			</nav>
+			<ul class="mui-table-view mui-grid-view mui-grid-9" >
+				<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
+					<p class="label-result">血压值:</p>
+					<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: blue;"></span>
+					<label class="label-result">77/51</label><label class="label-result"> mmH</label>
+					<p class="label-result">2016/03/18 10:35:36</p>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
+					<p class="label-result">血压异常值:</p>
+					<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: orange;"></span>
+					<label class="label-result">77/51</label><label class="label-result"> mmH</label>
+					<p class="label-result">2016/03/18 10:35:36</p>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
+					<p class="label-result">心率/脉率值:</p>
+					<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: red;"></span>
+					<label class="label-result">77/51</label><label class="label-result"> bpm</label>
+					<p class="label-result">2016/03/18 10:35:36</p>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
+					<p class="label-result">心率异常值:</p>
+					<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: darkmagenta;"></span>
+					<label class="label-result">77/51</label><label class="label-result"> bpm</label>
+					<p class="label-result">2016/03/18 10:35:36</p>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
+					<p class="label-result">血氧值:</p>
+					<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: pink;"></span>
+					<label class="label-result">77/51</label><label class="label-result"> %</label>
+					<p class="label-result">2016/03/18 10:35:36</p>
+				</li>
+				<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
+					<p class="label-result">SOS异常记录:</p>
+					<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: brown;"></span>
+					<label class="label-result">离开安全区</label><label class="label-result"> </label>
+					<p class="label-result">2016/03/18 10:35:36</p>
+				</li>
+			</ul>
 		</div>
-
-		<ul class="mui-table-view mui-grid-view mui-grid-9">
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#">
-					<span class="mui-icon mui-icon-home"></span>
-					<div class="mui-media-body">主页</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#">
-					<span class="mui-icon mui-icon-contact"></span>
-					<div class="mui-media-body">个人信息</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#">
-					<span class="mui-icon mui-icon-person"></span>
-					<div class="mui-media-body">患者信息</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#" onclick='pageJump("list.html")'>
-					<span class="mui-icon mui-icon-chatbubble"><span class="mui-badge">5</span></span>
-					<div class="mui-media-body">历史通知</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#">
-					<span class="mui-icon mui-icon-search"></span>
-					<div class="mui-media-body">查询</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#">
-					<span class="mui-icon mui-icon-phone"></span>
-					<div class="mui-media-body">电话</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#" onclick='pageJump("reference.html")'>
-					<span class="mui-icon mui-icon-gear"></span>
-					<div class="mui-media-body">参数设置</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#">
-					<span class="mui-icon mui-icon-info"></span>
-					<div class="mui-media-body">关于</div>
-				</a>
-			</li>
-			<li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-				<a href="#">
-					<span class="mui-icon mui-icon-more"></span>
-					<div class="mui-media-body">更多</div>
-				</a>
-			</li>
-		</ul>
-
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/app.js"></script>
 		<script type="text/javascript" charset="utf-8">
