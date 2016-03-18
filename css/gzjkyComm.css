@@ -1,0 +1,28 @@
+
+
+table.mui-table-etc {
+	font-size: 11px;
+	color: #333333;
+	border-width: 1px;
+	border-color: #a9c6c9;
+	border-collapse: collapse;
+}
+
+table.mui-table-etc th {
+	border-width: 0px;
+	font-size: 15px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #F8F8F8;
+	background-color: #E0E0E0;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+}
+
+table.mui-table-etc td {
+	border-width: 0px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #EFEFF4;
+	border-bottom-width: 1px;
+}
