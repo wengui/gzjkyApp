@@ -27,7 +27,7 @@
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell mui-media">
 						<a class="mui-left" href="#account">
-							<img class="mui-media-object mui-pull-left " id="headimg" >
+							<img class="mui-media-object mui-pull-left " id="headimg">
 							<div class="mui-media-body" id="title">
 
 							</div>
@@ -47,11 +47,11 @@
 
 				</ul>
 
-				<div class="title" >
+				<div class="title">
 					我的设备
 				</div>
 				<ul class="mui-table-view" id="eqp">
-					
+
 				</ul>
 				<ul class="mui-table-view" style="margin-top: 25px;">
 					<li class="mui-table-view-cell">
@@ -68,51 +68,41 @@
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/app.js"></script>
 	<script>
-
 		mui.init({
 			pullRefresh: {
-					container: '#pullrefresh',
-					down: {
-						callback: pulldownRefresh
-					},
-//					up: {
-//						contentrefresh: '正在加载...',
-//						callback: pullupRefresh
-//					}
+				container: '#pullrefresh',
+				down: {
+					callback: pulldownRefresh
+				}
 			}
 		});
-		
+
 		function pulldownRefresh() {
-			location.reload();			
+			location.reload();
+			mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
 		}
-		
-		
+
 		mui.plusReady(function() {
 			//标题栏，最近登录时间显示
-			title.innerHTML="你好，"+localStorage.getItem('user')+
-			"<p class='mui-ellipsis'>最近登录 :"+ localStorage.getItem('online')+"</p>";
+			title.innerHTML = "你好，" + localStorage.getItem('user') +
+				"<p class='mui-ellipsis'>最近登录 :" + localStorage.getItem('online') + "</p>";
 			//根据storage内容显示家庭成员
-			var familyList = JSON.parse(localStorage.getItem('patientList'));			
+			var familyList = JSON.parse(localStorage.getItem('patientList'));
 			if (familyList != null && familyList.length > 0) {
-						
-						console.log("家庭列表"+familyList);
-						var str = "";
-						for (var i = 0; i < familyList.length; i++) {							
-							str += "<li class='mui-table-view-cell mui-media'>" + familyList[i].pname ;
-							//用户切换图标
-							str +="<a class='mui-action-back mui-icon mui-icon-redo mui-pull-right'></a>";
-							
-							str +="</li>";
-						}
-						var info = document.getElementById("doc");
-						family.innerHTML = str;
-					}
-			
+				console.log("家庭列表" + familyList);
+				var str = "";
+				for (var i = 0; i < familyList.length; i++) {
+					str += "<li class='mui-table-view-cell mui-media'>" + familyList[i].pname;
+					//用户切换图标
+					str += "<a class='mui-action-back mui-icon mui-icon-redo mui-pull-right'></a>";
+					str += "</li>";
+				}
+				var info = document.getElementById("doc");
+				family.innerHTML = str;
+			}
 			console.log("头像获取开始");
-			headimg.src=API_ADDRESS + "person/getHeadImage.do?pid="+localStorage.getItem('patientID');
+			headimg.src = API_ADDRESS + "person/getHeadImage.do?pid=" + localStorage.getItem('patientID');
 			console.log("头像获取结束");
-
-	
 			//获取医院医生ajax				
 			mui.ajax(API_ADDRESS + 'person/getHospitalAndDoctor.do', {
 				//mui.ajax('http://192.168.1.161:8080/gzjky/login/login.do', {
@@ -126,7 +116,7 @@
 				success: function(data) {
 					//服务器返回响应，根据响应结果，分析是否登录成功；
 					var hosDocInfoList = data.result;
-					console.log("病人列表"+JSON.stringify(hosDocInfoList));
+					console.log("病人列表" + JSON.stringify(hosDocInfoList));
 					console.log(hosDocInfoList.length);
 					if (hosDocInfoList != null && hosDocInfoList.length > 0) {
 						var str = "";
@@ -134,8 +124,7 @@
 							var text = '';
 							var bind_type = hosDocInfoList[i].bind_type;
 							//text = hosDocInfoList[i].hName + "(" + hosDocInfoList[i].dName + ")";
-							str += "<li class='mui-table-view-cell mui-media'>" + hosDocInfoList[i].hName +  "：" +hosDocInfoList[i].dName+"</li>";
-
+							str += "<li class='mui-table-view-cell mui-media'>" + hosDocInfoList[i].hName + "：" + hosDocInfoList[i].dName + "</li>";
 						}
 						var info = document.getElementById("doc");
 						info.innerHTML = str;
@@ -151,7 +140,6 @@
 					//return callback('用户名或密码错误');
 				}
 			});
-			
 			//获取设备				
 			mui.ajax(API_ADDRESS + 'person/getEquipment.do', {
 				//mui.ajax('http://192.168.1.161:8080/gzjky/login/login.do', {
@@ -169,15 +157,12 @@
 					if (EquipmentList != null && EquipmentList.length > 0) {
 						var str = "";
 						for (var i = 0; i < EquipmentList.length; i++) {
-
 							str += "<li class='mui-table-view-cell mui-media'>"
-							//设备名字
-							str +=EquipmentList[i].deviceVersionName ;
+								//设备名字
+							str += EquipmentList[i].deviceVersionName;
 							//详情图标
-							str +="<a class='mui-action-back mui-icon mui-icon-bars mui-pull-right'></a>";
-							
-							str +="</li>";
-							
+							str += "<a class='mui-action-back mui-icon mui-icon-bars mui-pull-right'></a>";
+							str += "</li>";
 						}
 						var info = document.getElementById("eqp");
 						info.innerHTML = str;
