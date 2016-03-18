@@ -54,6 +54,7 @@
 	<script src="../js/angular/angular.min.js"></script>
 	<script>
 		mui.init({
+			// 下拉刷新
 			pullRefresh: {
 				container: '#pullrefresh',
 				down: {
@@ -62,9 +63,14 @@
 			}
 		});
 
+		// 下拉刷新
 		function pulldownRefresh() {
 			location.reload();
+			mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+			
 		}
+		
+			
 		mui.plusReady(function() {
 			//通过DOM操作获取app对象
 			var element = angular.element(document.getElementById("equipment-App"));
