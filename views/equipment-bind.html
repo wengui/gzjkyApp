@@ -54,7 +54,6 @@
 			});
 			
 			mui.plusReady(function() {
-					
 					plus.nativeUI.showWaiting("正在加载");
 					// 数据加载
 					addBtnEventListner();
@@ -75,22 +74,28 @@
 					// 调用angularjs方法，初期化显示
 					//$scope.init();
 					
-					// 设备序列号为空
-					if('' == scope.deviceSid){
-						plus.nativeUI.toast("设备序列号不能为空！");
-						return false;
-					}
-					// 设备绑定码
-					if('' == scope.deviceBindCode){
-						plus.nativeUI.toast("设备绑定码不能为空！");
-						return false;
-					}
+					// 提交
+					document.getElementById("confirmBtn").addEventListener("tap", function() {
+						
+						
+			
+						// 设备序列号为空
+						if('' == scope.deviceSid){
+							plus.nativeUI.toast("设备序列号不能为空！");
+							return false;
+						}
+						// 设备绑定码
+						if('' == scope.deviceBindCode){
+							plus.nativeUI.toast("设备绑定码不能为空！");
+							return false;
+						}
+						
+						// 提交处理
+						scope.equipmentBind(plus);
+						
+					}, false);
 					
-					// 提交处理
-					scope.equipmentBind(plus);
-					
-				}, false);
-			}
+				}
 			
 				
 				// angularjs处理
@@ -116,8 +121,8 @@
 					
 					$scope.param = {};
 					$scope.param.deviceSid = $scope.deviceSid;
-					//$scope.param.deviceBindCode = $scope.deviceBindCode;
-					//$scope.param.deviceNickname = $scope.deviceNickname;
+					$scope.param.deviceBindCode = $scope.deviceBindCode;
+					$scope.param.deviceNickname = $scope.deviceNickname;
 					plus.nativeUI.showWaiting("正在加载");
 					console.log("scope.getequipment start");
 					// 调取后台API
@@ -146,17 +151,21 @@
 	    				plus.nativeUI.toast("该设备已绑定一个账户");
 	    			}else if(status == '5'){
 
-		    			mui.openWindow({
-							url: 'equipment.html',
-							id: 'equipment.html',
-							waiting: {
-								autoShow: false //自动显示等待框，默认为true
-							}
-						});
 						// 清空输入框的值
 						$scope.deviceSid ="";
 						$scope.deviceBindCode="";
 						$scope.deviceNickname="";
+					
+						//若为iOS平台或非首次显示，则直接显示
+						var currentWebview = plus.webview.getWebviewById("equipment.html");
+						mui.fire(currentWebview, "pageflowrefresh" );//出发A页面的pageflowrefresh方法
+						console.log("currentWebview:"+currentWebview);
+						currentWebview.loadURL("equipment.html");
+						//隐藏当前;
+						plus.webview.hide('equipment-bind.html');
+						currentWebview.show("equipment.html");
+						
+
 	    				// 绑定成功
 	    				plus.nativeUI.toast("绑定成功");
 	    				
