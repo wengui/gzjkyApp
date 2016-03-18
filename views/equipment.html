@@ -67,6 +67,11 @@
 				});
 		
 		
+				// 页面刷新出来
+				window.addEventListener("pageflowrefresh", function (e) {
+					    location.reload();
+				});
+		
 				// angularjs处理
 				//绑定模块，在html标签中定义模块名，这里定义的是equipment-App
 				var Testapp = angular.module("equipment-App", []);
