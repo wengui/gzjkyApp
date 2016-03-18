@@ -7,10 +7,11 @@
 	display: none;
 }
 */
-.mui-plus.mui-android .mui-bar-nav~.mui-content{
+/*.mui-plus.mui-android .mui-bar-nav~.mui-content{
 	padding-top: 25px;
-}
+}*/
 .mui-icon-addequiment:before{content:'\E747'}
+.mui-icon-etc:before{content:'\E64D'}
 
 /** 我的设备图片设置 */
 .mui-media-equipment-object{
