@@ -29,11 +29,9 @@
 				<ul class="mui-table-view mui-table-view-chevron">
 					<li class="mui-table-view-cell mui-media">
 						<a class="mui-left" href="#account">
-							<img class="mui-media-object mui-pull-left " id="head-img" src="../images/shuijiao.jpg">
-							<div class="mui-media-body">
+							<img class="mui-media-object mui-pull-left " id="headimg" >
+							<div class="mui-media-body" id="title">
 
-								你好，李大龙
-								<p class='mui-ellipsis'>最近登录 : 2016/02/16 17:44:48</p>
 							</div>
 						</a>
 					</li>
@@ -41,7 +39,7 @@
 				<div class="title">
 					我的家庭成员
 				</div>
-				<ul class="mui-table-view" id="xy">
+				<ul class="mui-table-view" id="family">
 
 				</ul>
 				<div class="title">
@@ -72,10 +70,36 @@
 	<script src="../js/mui.min.js"></script>
 	<script src="../js/app.js"></script>
 	<script>
+
 		mui.init({
 			swipeBack: true //启用右滑关闭功能
 		});
 		mui.plusReady(function() {
+			//标题栏，最近登录时间显示
+			title.innerHTML="你好，"+localStorage.getItem('user')+
+			"<p class='mui-ellipsis'>最近登录 :"+ localStorage.getItem('online')+"</p>";
+			//根据storage内容显示家庭成员
+			var familyList = JSON.parse(localStorage.getItem('patientList'));			
+			if (familyList != null && familyList.length > 0) {
+						
+						console.log("家庭列表"+familyList);
+						var str = "";
+						for (var i = 0; i < familyList.length; i++) {							
+							str += "<li class='mui-table-view-cell mui-media'>" + familyList[i].pname ;
+							//用户切换图标
+							str +="<a class='mui-action-back mui-icon mui-icon-redo mui-pull-right'></a>";
+							
+							str +="</li>";
+						}
+						var info = document.getElementById("doc");
+						family.innerHTML = str;
+					}
+			
+			console.log("头像获取开始");
+			headimg.src=API_ADDRESS + "person/getHeadImage.do?pid="+localStorage.getItem('patientID');
+			console.log("头像获取结束");
+
+	
 			//获取医院医生ajax				
 			mui.ajax(API_ADDRESS + 'person/getHospitalAndDoctor.do', {
 				//mui.ajax('http://192.168.1.161:8080/gzjky/login/login.do', {
@@ -89,6 +113,7 @@
 				success: function(data) {
 					//服务器返回响应，根据响应结果，分析是否登录成功；
 					var hosDocInfoList = data.result;
+					console.log("病人列表"+JSON.stringify(hosDocInfoList));
 					console.log(hosDocInfoList.length);
 					if (hosDocInfoList != null && hosDocInfoList.length > 0) {
 						var str = "";
