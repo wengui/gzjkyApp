@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hello MUI</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+		<!--标准mui.css-->
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<style>
+			.title {
+				margin: 20px 15px 10px;
+				color: #6d6d72;
+				font-size: 15px;
+			}
+		</style>
+	</head>
+
+	<body ng-app="myApp" ng-controller="userCtrl">
+		<div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+
+			<div class="title">
+				提醒列表
+			</div>
+			<div class="mui-card" style="margin-bottom: 35px;">
+				<ul class="mui-table-view" id="content">
+
+				</ul>
+			</div>
+
+		</div>
+
+	</body>
+	<script src="../js/mui.min.js"></script>
+	<script src="../js/views/app.js"></script>
+	<script>
+		mui.init({
+			pullRefresh: {
+				container: '#pullrefresh',
+				down: {
+					callback: pulldownRefresh
+				}
+			}
+		});
+
+		function pulldownRefresh() {
+			location.reload();
+			mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+		}
+				mui.plusReady(function() {
+			var options = {
+				cover: false
+			};
+			//显示历史一览用
+			plus.nativeUI.showWaiting("正在加载");
+			var naiyo = '';
+			console.log(API_ADDRESS+'message/getMedicalRemind.do');
+			mui.ajax(API_ADDRESS+'message/getMedicalRemind.do', {
+				data: {
+					pid:localStorage.getItem('patientID')
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				timeout: 5000, //超时时间设置为10秒；
+				success: function(data) {
+					//服务器返回响应，根据响应结果，分析是否登录成功；
+					console.log("success");
+					console.log( JSON.stringify(data.result));
+					var obj = data.result;
+					for (var i = 0; i < obj.length; i++) {
+						//标题
+						//json日期转换
+						//var date= new Date(obj[i].testtime.time).Format("yyyy-MM-dd hh:mm:ss");
+						naiyo += "<li class='mui-table-view-cell'>"+
+							"<a class='mui-navigate-right'>"+
+							
+							"用药提醒" +"&nbsp"+"&nbsp"+"&nbsp"+ "提醒周期: " + obj[i].txzq +
+							"<h5>"+"提醒内容: " + obj[i].txnr + "</h5>"+
+							"<h6>"+"提醒时间: " + obj[i].txtime+ "</h6>"+
+						"</a>" + "</li>";
+					}
+					console.log(naiyo);
+					
+					content.innerHTML = naiyo;
+					plus.nativeUI.closeWaiting();
+				},
+				error: function(xhr, type, errorThrown) { //异常处理；
+					plus.nativeUI.closeWaiting();
+					mui.alert('数据服务器链接失败', '错误', function() {
+					
+					});
+
+				}
+			});
+
+		});
+	</script>
+
+</html>
