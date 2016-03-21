@@ -1,4 +1,4 @@
-var API_ADDRESS = 'http://192.168.1.165:8080/gzjkyApi/'; //定义了常量
+var API_ADDRESS = 'http://192.168.1.166:8080/gzjkyApi/'; //定义了常量
 /**
  * 演示程序当前的 “注册/登录” 等操作，是基于 “本地存储” 完成的
  * 当您要参考这个演示程序进行相关 app 的开发时，
@@ -48,9 +48,9 @@ var API_ADDRESS = 'http://192.168.1.165:8080/gzjkyApi/'; //定义了常量
 						//最近登录时间
 						localStorage.setItem('online', result.online);
 						//患者list
-						localStorage.setItem('patientList', result.patientList);
+						localStorage.setItem('patientList', JSON.stringify(result.patientList));
 						//当前用户信息
-						localStorage.setItem('patient', result.patient);
+						localStorage.setItem('patient', JSON.stringify(result.patient));
 						//当前patientid
 						localStorage.setItem('patientID', result.patientID);
 						//用户名
