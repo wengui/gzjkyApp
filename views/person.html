@@ -66,7 +66,7 @@
 
 	</body>
 	<script src="../js/mui.min.js"></script>
-	<script src="../js/app.js"></script>
+	<script src="../js/views/app.js"></script>
 	<script>
 		mui.init({
 			pullRefresh: {
@@ -161,7 +161,7 @@
 								//设备名字
 							str += EquipmentList[i].deviceVersionName;
 							//详情图标
-							str += "<a class='mui-action-back mui-icon mui-icon-bars mui-pull-right'></a>";
+							str += "<span class='mui-action-back mui-icon mui-icon-bars mui-pull-right'></span>";
 							str += "</li>";
 						}
 						var info = document.getElementById("eqp");
