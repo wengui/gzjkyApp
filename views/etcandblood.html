@@ -10,7 +10,7 @@
 
 
 		<!--标准mui.css-->
-		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/mui.css">
 		<!--App自定义的css-->
 		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
 		<link rel="stylesheet" href="../css/app.css" />
@@ -36,24 +36,24 @@
 			}
 			</style>
 	</head>
-	<body>
+	<body ng-app="etcAndBlood-App" id="etcAndBlood-App" ng-controller="etcAndBlood-Controller">
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">血压心电</h1>
 		</header>
 		<nav class="mui-bar mui-bar-tab">
-			<a id="delete-btn" class="mui-tab-item">
-				<span class="mui-icon mui-icon-trash">近期血压趋势</span>
+			<a id="delete-btn" class="mui-tab-item-etc">
+				<span class="mui-icon mui-icon-etc-blood" ><span class="mui-etc-fontAndcolor">近期血压趋势</span></span>
 			</a>
-			<a class="mui-tab-item" href="#">
-				<span class="mui-icon mui-icon-trash">近期晨峰压趋势</span>
+			<a class="mui-tab-item-etc" href="#">
+				<span class="mui-icon mui-icon-blood-etc" ><span class="mui-etc-fontAndcolor">近期晨峰压趋势</span></span>
 			</a>
 		</nav>
 		<div class="mui-content">
 			<div style="padding: 10px 10px;">
 				<div id="segmentedControl" class="mui-segmented-control">
-					<a class="mui-control-item mui-active" href="#item1">血压</a>
-					<a class="mui-control-item" href="#item2">心电</a>
+					<a class="mui-control-item mui-active" id="blood" href="#item1">血压</a>
+					<a class="mui-control-item" id="etc" href="#item2">心电</a>
 				</div>
 				<div>
 					<input id="startDate" style="width: 38%;margin: 5px;margin-left:8px;float:left;" name="startDate" type="text" data-options='{"type":"date"}' 
@@ -62,21 +62,19 @@
 					<input id="endDate" style="width: 38%;margin: 5px;display:inline;" name="endDate" type="text" data-options='{"type":"date"}' 
 					placeholder="结束日期"	class="btn mui-btn mui-btn-block"/>
 				</div>
+				<div><input id="search" type="button" value="查询" class="btn mui-btn mui-btn-green" style="width: 95%;margin-left: 8px;background-color: green;"></div>
 			</div>
 			<div>
 				<div id="item1" class="mui-control-content mui-active">
-				<div class="mui-input-group">
+				<div class="mui-input-group pullrefresh">
 					<div class="div-td"> 
 						<table class="mui-table-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0"> 
 						<tr>
 							<th>日期</th><th>收缩压</th><th>舒张压</th><th>平均压</th>
 						</tr>
-						<tr>
+						<tr >
 							<td>Text 2A</td><td>Text 2B</td><td>Text 2C</td><td>Text 4C</td>
 						</tr>
-						</tr>
-						<tr>
-							<td>Text 3A</td><td>Text 3B</td><td>Text 3C</td><td>Text 4C</td>
 						</tr>
 						</table> 
 					</div> 
@@ -105,8 +103,31 @@
 				
 			(function($) {
 			mui.init({
-				swipeBack:true //启用右滑关闭功能
+				pullRefresh: {
+					container: '#pullrefresh',
+					up: {
+						contentrefresh: '正在加载...',
+						callback: pullupRefresh
+					}
+				}
 			});
+			
+			/**
+			 * 上拉加载具体业务实现
+			 */
+			function pullupRefresh() {
+				setTimeout(function() {
+					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
+					var table = document.body.querySelector('.mui-table-view');
+					var cells = document.body.querySelectorAll('.mui-table-view-cell');
+					for (var i = cells.length, len = i + 20; i < len; i++) {
+						var li = document.createElement('li');
+						li.className = 'mui-table-view-cell';
+						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
+						table.appendChild(li);
+					}
+				}, 1500);
+			}
 			
 			mui.plusReady(function() {
 					
@@ -121,7 +142,41 @@
 				
 				
 				//添加按钮监听
-				function addBtnEventListner() {}
+				function addBtnEventListner() {
+					
+					var searchFlag = 0;
+					
+					
+					// 提交
+					document.getElementById("search").addEventListener("tap", function() {
+			
+						if(0 == scope.searchFlag){
+							// 血压结果检索
+							searchBlood(plus);
+						}else{
+							// 心电结果检索
+							searchEtc(plus);
+						}
+						
+					}, false);
+					
+					// 血压
+					document.getElementById("blood").addEventListener("tap", function() {
+			
+						// 设置查询flag
+						searchFlag = "0";		
+					}, false);
+					
+					// 心脏
+					document.getElementById("etc").addEventListener("tap", function() {
+			
+						// 设置查询flag
+						searchFlag = "1";		
+					}, false);
+					
+					
+				}
+				
 				
 				// 开始日期
 				document.getElementById('startDate').addEventListener('tap',function(){
@@ -142,8 +197,6 @@
 					// 日期设定
 					setdate(options,endDate);
 				},false);
-				
-				
 				
 				
 				
