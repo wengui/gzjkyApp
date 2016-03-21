@@ -85,15 +85,6 @@
 			    border-bottom: 1px solid #209153;
 			    border-radius: 5px;
 			}
-			.mui-icon-middle{
-				border-style: solid;
-				border-width: 2px;
-				border-radius: 5px;
-				padding: 5px;
-				top:0;
-				width: auto;
-				height: auto;
-			}
 			.label-result{
 				font-size:15px;
 				color:#555555;
@@ -103,7 +94,7 @@
 	</head>
 
 	<body>
-		<div class="mui-content">
+		<div id="pullrefresh" class="mui-content">
 			<div id="slider" class="mui-slider">
 				<div class="mui-slider-group mui-slider-loop">
 					<!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
@@ -168,54 +159,78 @@
 					<span class="mui-tab-label">血压等级</span>
 				</a>
 			</nav>
-			<div ng-app="homeDetail-App" id="homeDetail-App" ng-controller="homeDetail-Controller">
+			<div  ng-app="homeDetail-App" id="homeDetail-App" ng-controller="homeDetail-Controller" >
 				<ul class="mui-table-view mui-grid-view mui-grid-9" >
 					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
 						<p class="label-result">血压值:</p>
 						<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: blue;"></span>
-						<label class="label-result" >{{shrink}}/{{diastole}}</label><label class="label-result"> mmH</label>
-						<p class="label-result">{{bloodTakeTime}}</p>
+						<label class="label-result" ng-if="healthDetail.shrink == ''">--/--</label>
+						<label class="label-result" ng-if="healthDetail.shrink != ''">{{healthDetail.shrink}}/{{healthDetail.diastole}}</label>
+						<label class="label-result"> mmH</label>
+						<p class="label-result" ng-if="healthDetail.bloodTakeTime == ''">----/--/-- --:--:--</p>
+						<p class="label-result" ng-if="healthDetail.bloodTakeTime != ''">{{healthDetail.bloodTakeTime}}</p>
 					</li>
 					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
 						<p class="label-result">血压异常值:</p>
 						<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: orange;"></span>
-						<label class="label-result">77/51</label><label class="label-result"> mmH</label>
-						<p class="label-result">2016/03/18 10:35:36</p>
+						<label class="label-result" ng-if="healthDetail.shrinkAlert == ''">--/--</label>
+						<label class="label-result" ng-if="healthDetail.shrinkAlert != ''">{{healthDetail.shrinkAlert}}/{{healthDetail.diastoleAlert}}</label>
+						<label class="label-result"> mmH</label>
+						<p class="label-result" ng-if="healthDetail.bloodTakeTimeAlert == ''">----/--/-- --:--:--</p>
+						<p class="label-result" ng-if="healthDetail.bloodTakeTimeAlert != ''">{{healthDetail.bloodTakeTimeAlert}}</p>
 					</li>
 					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
 						<p class="label-result">心率/脉率值:</p>
 						<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: red;"></span>
-						<label class="label-result">77/51</label><label class="label-result"> bpm</label>
-						<p class="label-result">2016/03/18 10:35:36</p>
+						<label class="label-result" ng-if="healthDetail.heartRate == ''">--</label>
+						<label class="label-result" ng-if="healthDetail.heartRate != ''">{{healthDetail.heartRate}}</label>
+						<label class="label-result"> bpm</label>
+						<p class="label-result" ng-if="healthDetail.heartTakeTime == ''">----/--/-- --:--:--</p>
+						<p class="label-result" ng-if="healthDetail.heartTakeTime != ''">{{healthDetail.heartTakeTime}}</p>
 					</li>
 					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
 						<p class="label-result">心率异常值:</p>
 						<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: darkmagenta;"></span>
-						<label class="label-result">77/51</label><label class="label-result"> bpm</label>
-						<p class="label-result">2016/03/18 10:35:36</p>
-					</li>
+						<label class="label-result" ng-if="healthDetail.heartRateAlert == ''">--</label>
+						<label class="label-result" ng-if="healthDetail.heartRateAlert != ''">{{healthDetail.heartRateAlert}}</label>
+						<label class="label-result"> bpm</label>
+						<p class="label-result" ng-if="healthDetail.heartTakeTimeAlert == ''">----/--/-- --:--:--</p>
+						<p class="label-result" ng-if="healthDetail.heartTakeTimeAlert != ''">{{healthDetail.heartTakeTimeAlert}}</p>					</li>
 					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
 						<p class="label-result">血氧值:</p>
 						<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: pink;"></span>
-						<label class="label-result">77/51</label><label class="label-result"> %</label>
-						<p class="label-result">2016/03/18 10:35:36</p>
+						<label class="label-result">--</label><label class="label-result"> %</label>
+						<p class="label-result">----/--/-- --:--:--</p>
 					</li>
 					<li class="mui-table-view-cell mui-media mui-col-xs-6 mui-col-sm-6" style="padding-left:5%;text-align: left;">
 						<p class="label-result">SOS异常记录:</p>
 						<span class="mui-icon mui-icon-blood" style="font-size: 25px;color: brown;"></span>
-						<label class="label-result">离开安全区</label><label class="label-result"> </label>
-						<p class="label-result">2016/03/18 10:35:36</p>
+						<label class="label-result">--</label><label class="label-result"> </label>
+						<p class="label-result">----/--/-- --:--:--</p>
 					</li>
 				</ul>
 			</div>
 		</div>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
+		<script src="../js/views/app.js"></script>
 		<script src="../js/angular/angular.min.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			mui.init({
-				swipeBack: true //启用右滑关闭功能
+				// 下拉刷新
+				pullRefresh: {
+					container: '#pullrefresh',
+					down: {
+						callback: pulldownRefresh
+					},
+				}//启用右滑关闭功能
 			});
+			// 下拉刷新
+			function pulldownRefresh() {
+				location.reload();
+				mui('#pullrefresh').pullRefresh().endPulldownToRefresh(); //refresh completed
+				
+			}
+			
 			
 			var Testapp = angular.module("homeDetail-App", []);
 			// 绑定controller,这里在div中定义的controller是equipment-Controller
@@ -227,24 +242,27 @@
 					return mui.param(data);
 				}
 				
+				//当前patientid
+				$scope.param = {};
+				$scope.param.pid = localStorage.getItem('patientID');
 				// 登录处理
 				$scope.getHealthStatus = function(plus) {
 					plus.nativeUI.showWaiting("正在加载");
 					console.log("scope.getequipment start");
 					// 调取后台API
-					$http.post(API_ADDRESS + 'healthStatus/QueryHealthStatus.do').success(function(data) {
+					$http.post(API_ADDRESS + 'healthStatus/QueryHealthStatus.do',
+						$scope.param, 
+						{
+	        				headers: { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+	        				transformRequest: transform
+	    				}
+					).success(function(data) {
 						// 处理成功的场合
 						console.log("angularjs数据取得成功！");
 						//服务器返回响应，根据响应结果，分析是否登录成功；
 						$scope.healthDetail = {};
 						$scope.healthDetail = data.result;
-						// 图片加载路径修正
-//						for (var i = 0; i < $scope.equList.length; i++) {
-//							if ('' != $scope.equList[i].image) {
-//								$scope.equList[i].image = '..' + $scope.equList[i].image;
-//							}
-//						}
-//						document.getElementById("equipment").style.visibility = "visible";
+						console.log($scope.healthDetail.shrink);
 						plus.nativeUI.closeWaiting();
 					}).error(function(err) {
 						plus.nativeUI.closeWaiting();
@@ -257,16 +275,15 @@
 			});
 			
 			mui.plusReady(function() {
-				
 				//通过DOM操作获取app对象
 				var element = angular.element(document.getElementById("homeDetail-App"));
 				//得到app对象，可以获取app的controller
 				var controller = element.controller();
 				//得到app对象，可以获取app的$scope
 				var scope = element.scope();
+				console.log("getHealthStatus");
 				// 调用angularjs方法，初期化显示
 				scope.getHealthStatus(plus);
-					
 				
 				
 				var options = {

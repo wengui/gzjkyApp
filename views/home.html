@@ -22,7 +22,7 @@
 		<header class="mui-bar mui-bar-nav">
 			<a id="bindEqp" class="mui-icon mui-icon-addequiment mui-pull-right" onclick='pageJump("equipment-bind.html")' style="visibility: hidden;"></a>
 			<h1 id="title" class="mui-title">健康</h1>
-			<span id="currentUser" class="mui-icon mui-icon-person " style="font-size: 16px;color:white;line-height: 20px;padding-top: 10px;">李大龙</span>
+			<span id="currentUser" class="mui-icon mui-icon-person " style="font-size: 16px;color:white;line-height: 20px;padding-top: 10px;"></span>
 		</header>
 
 		<nav class="mui-bar mui-bar-tab">
@@ -49,7 +49,7 @@
 			</a>
 		</nav>
 		<script src="../js/mui.min.js"></script>
-		<script src="../js/app.js"></script>
+		<script src="../js/views/app.js"></script>
 		<script type="text/javascript" charset="utf-8">
 			//mui初始化
 			//启用双击监听
@@ -77,6 +77,8 @@
 					}
 					self.append(sub);
 				}
+				
+				currentUser.innerHTML =  localStorage.getItem('user');
 			});
 			//当前激活选项
 			var activeTab = subpages[0];
