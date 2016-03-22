@@ -19,9 +19,6 @@
 			.mui-card .mui-control-content {
 				padding: 10px;
 			}
-			.mui-control-content {
-				height: 400px;
-			}
 			
 
 		</style>
@@ -36,7 +33,7 @@
 			}
 			</style>
 	</head>
-	<body ng-app="etcAndBlood-App" id="etcAndBlood-App" ng-controller="etcAndBlood-Controller">
+	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
 			<h1 class="mui-title">血压心电</h1>
@@ -66,15 +63,11 @@
 			</div>
 			<div>
 				<div id="item1" class="mui-control-content mui-active">
-				<div class="mui-input-group pullrefresh">
+				<div class="mui-input-group" id="pullrefresh">
 					<div class="div-td"> 
 						<table class="mui-table-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0"> 
 						<tr>
-							<th>日期</th><th>收缩压</th><th>舒张压</th><th>平均压</th>
-						</tr>
-						<tr >
-							<td>Text 2A</td><td>Text 2B</td><td>Text 2C</td><td>Text 4C</td>
-						</tr>
+							<th>日期</th><th>收缩压</th><th>舒张压</th><th>脉率</th>
 						</tr>
 						</table> 
 					</div> 
@@ -97,7 +90,7 @@
 		</div>
 		<script src="../js/mui.min.js"></script>
 		<script src="../js/mui.picker.min.js"></script>
-		<script src="../js/angular/angular.min.js"></script>
+		<script type="text/javascript" src="../js/views/app.js" ></script>
 		<script>
 
 				
@@ -112,45 +105,52 @@
 				}
 			});
 			
+			var count = 0;
+			var pageStart = 0;
 			/**
 			 * 上拉加载具体业务实现
 			 */
 			function pullupRefresh() {
 				setTimeout(function() {
-					mui('#pullrefresh').pullRefresh().endPullupToRefresh((++count > 2)); //参数为true代表没有更多数据了。
-					var table = document.body.querySelector('.mui-table-view');
-					var cells = document.body.querySelectorAll('.mui-table-view-cell');
-					for (var i = cells.length, len = i + 20; i < len; i++) {
-						var li = document.createElement('li');
-						li.className = 'mui-table-view-cell';
-						li.innerHTML = '<a class="mui-navigate-right">Item ' + (i + 1) + '</a>';
-						table.appendChild(li);
-					}
+					searchBlood();
 				}, 1500);
 			}
+			
 			
 			mui.plusReady(function() {
 					
 				plus.nativeUI.showWaiting("正在加载");
 				// 数据加载
 				addBtnEventListner();
+				//searchBlood();
 					
 				// 加载完成
 				plus.nativeUI.closeWaiting();
 
 			});
 				
-				
 				//添加按钮监听
 				function addBtnEventListner() {
 					
 					var searchFlag = 0;
-					
+					// 一页加载10条记录
+					var pageSize = 10;
 					
 					// 提交
 					document.getElementById("search").addEventListener("tap", function() {
 			
-						if(0 == scope.searchFlag){
+
+//						if(0 == searchFlag){
+//						var blooddiv=document.getElementById("item1");
+//						
+//						var pullrefresh = '<div class="mui-input-group" id="pullrefresh">';
+//						pullrefresh = pullrefresh + '<div class="div-td">';
+//						pullrefresh = pullrefresh + '<table class="mui-table-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0">';
+//						pullrefresh = pullrefresh + '<tr><th>日期</th><th>收缩压</th><th>舒张压</th><th>脉率</th></tr>';
+//						pullrefresh = pullrefresh + '</table></div></div>';
+//						
+//						blooddiv.innerHTML = pullrefresh;
+
 							// 血压结果检索
 							searchBlood(plus);
 						}else{
@@ -174,7 +174,66 @@
 						searchFlag = "1";		
 					}, false);
 					
+				} 
+				
+				var searchBlood = function(){
+					//var patientId = localStorage.getItem("patientID");
+					var patientId = '1';
+					var startDate = document.getElementById("startDate");
 					
+					var endDate = document.getElementById("endDate");
+					console.log(pageStart);
+					//获取设备				
+					mui.ajax(API_ADDRESS + 'historyAction/queryBloodPressureList.do', {
+						//当前patientid
+						
+						data: {
+							pointerStart: pageStart,
+							pageSize: '10',
+							patientId:patientId,
+							startDate:startDate.value,
+							endDate:endDate.value
+						},
+						dataType: 'json', //服务器返回json格式数据
+						type: 'post', //HTTP请求类型
+						timeout: 50000, //超时时间设置为10秒；
+						success: function(data) {
+							var bloodeList = data.result.outBeanList;
+							// 数据总条数
+							var total = data.result.recordTotal;
+							
+							var table = document.body.querySelector('.mui-table-etc');
+							
+							var cells = document.body.querySelectorAll('.blood-td');
+							
+							for (var i = 0;i < bloodeList.length; i++) {
+								var tr = document.createElement('tr');
+								if('Danger'==bloodeList[i].state){
+									tr.className = 'blood-td-denger';
+								}else{
+									tr.className = 'blood-td';
+								}
+								
+								tr.innerHTML = '<td>'+bloodeList[i].takeTime+'</td><td>'+bloodeList[i].shrink+'</td><td>'+bloodeList[i].diastole+'</td><td>'+bloodeList[i].pressureValue+'</td>';
+								table.appendChild(tr);
+								count ++;
+								
+							}
+							
+					
+							pageStart = pageStart + 10;
+							console.log("success");
+							console.log(pageStart);
+							console.log(count);
+							mui('#pullrefresh').pullRefresh().endPullupToRefresh(count >= total); //参数为true代表没有更多数据了
+						},
+						error: function(xhr, type, errorThrown) {
+							//异常处理；
+							console.log("failure");
+							console.log(type);
+							//return callback('用户名或密码错误');
+						}
+					});
 				}
 				
 				
@@ -186,6 +245,7 @@
 						
 					// 日期设定
 					setdate(options,startDate);
+					
 				},false);
 				
 				// 结束日期
@@ -220,6 +280,9 @@
 							 * rs.i 分（minutes 的第二个字母），用法同年
 							 */
 							selectDate.value = rs.text;
+							
+							// 条件变更  记录数重置
+							count = 0;
 							/* 
 							 * 返回 false 可以阻止选择框的关闭
 							 * return false;
