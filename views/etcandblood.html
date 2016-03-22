@@ -8,7 +8,6 @@
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-
 		<!--标准mui.css-->
 		<link rel="stylesheet" href="../css/mui.css">
 		<!--App自定义的css-->
@@ -19,20 +18,18 @@
 			.mui-card .mui-control-content {
 				padding: 10px;
 			}
-			
-
 		</style>
-		
+
 		<style type="text/css">
-			
 			.oddrowcolor{
 				background-color:#d4e3e5;
 			}
 			.evenrowcolor{
 				background-color:#c3dde0;
 			}
-			</style>
+		</style>
 	</head>
+
 	<body>
 		<header class="mui-bar mui-bar-nav">
 			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
@@ -40,10 +37,10 @@
 		</header>
 		<nav class="mui-bar mui-bar-tab">
 			<a id="delete-btn" class="mui-tab-item-etc">
-				<span class="mui-icon mui-icon-etc-blood" ><span class="mui-etc-fontAndcolor">近期血压趋势</span></span>
+				<span class="mui-icon mui-icon-etc-blood"><span class="mui-etc-fontAndcolor">近期血压趋势</span></span>
 			</a>
 			<a class="mui-tab-item-etc" href="#">
-				<span class="mui-icon mui-icon-blood-etc" ><span class="mui-etc-fontAndcolor">近期晨峰压趋势</span></span>
+				<span class="mui-icon mui-icon-blood-etc"><span class="mui-etc-fontAndcolor">近期晨峰压趋势</span></span>
 			</a>
 		</nav>
 		<div class="mui-content">
@@ -53,252 +50,263 @@
 					<a class="mui-control-item" id="etc" href="#item2">心电</a>
 				</div>
 				<div>
-					<input id="startDate" style="width: 38%;margin: 5px;margin-left:8px;float:left;" name="startDate" type="text" data-options='{"type":"date"}' 
-					placeholder="开始日期"	class="btn mui-btn mui-btn-block"/>
+					<input id="startDate" style="width: 38%;margin: 5px;margin-left:8px;float:left;" name="startDate" type="text" data-options='{"type":"date"}' placeholder="开始日期" class="btn mui-btn mui-btn-block" />
 					<div style="witdh:20%; float:left;margin: 15px;display:inline"> <span class="mui-action-back mui-icon mui-icon-etc mui-pull-left"></span></div>
-					<input id="endDate" style="width: 38%;margin: 5px;display:inline;" name="endDate" type="text" data-options='{"type":"date"}' 
-					placeholder="结束日期"	class="btn mui-btn mui-btn-block"/>
+					<input id="endDate" style="width: 38%;margin: 5px;display:inline;" name="endDate" type="text" data-options='{"type":"date"}' placeholder="结束日期" class="btn mui-btn mui-btn-block" />
 				</div>
-				<div><input id="search" type="button" value="查询" class="btn mui-btn mui-btn-green" style="width: 95%;margin-left: 8px;background-color: green;"></div>
+				<div>
+					<input id="search" type="button" value="查询" class="btn mui-btn mui-btn-green" style="width: 95%;margin-left: 8px;background-color: green;">
+				</div>
 			</div>
 			<div>
 				<div id="item1" class="mui-control-content mui-active">
-				<div class="mui-input-group" id="pullrefresh">
-					<div class="div-td"> 
-						<table class="mui-table-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0"> 
-						<tr>
-							<th>日期</th><th>收缩压</th><th>舒张压</th><th>脉率</th>
-						</tr>
-						</table> 
-					</div> 
-				</div>
+					<div class="mui-input-group" id="pullrefresh">
+						<div class="div-td">
+							<table class="mui-table-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0">
+								<tr>
+									<th>日期</th>
+									<th>收缩压</th>
+									<th>舒张压</th>
+									<th>脉率</th>
+								</tr>
+							</table>
+						</div>
+					</div>
 				</div>
 				<div id="item2" class="mui-control-content">
-					<ul class="mui-table-view">
-						<li class="mui-table-view-cell">
-							第二个选项卡子项-1
-						</li>
-						<li class="mui-table-view-cell">
-							第二个选项卡子项-2
-						</li>
-						<li class="mui-table-view-cell">
-							第二个选项卡子项-3
-						</li>
-					</ul>
+					<div class="mui-input-group" id="pulletcrefresh">
+						<div class="div-td">
+							<table class="mui-table-blood-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0">
+								<tr>
+									<th>日期</th>
+									<th>心率</th>
+									<th>时长</th>
+									<th>心电图</th>
+								</tr>
+							</table>
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
-		<script src="../js/mui.min.js"></script>
-		<script src="../js/mui.picker.min.js"></script>
-		<script type="text/javascript" src="../js/views/app.js" ></script>
-		<script>
+			<script src="../js/mui.min.js"></script>
+			<script src="../js/mui.picker.min.js"></script>
+			<script type="text/javascript" src="../js/views/app.js"></script>
+			<script>
+				(function($) {
+				mui.init({
+					pullRefresh: {
+						container: '#pullrefresh',
+						up: {
+							contentrefresh: '正在加载...',
+							callback: pullupRefresh
+						}
+						
 
-				
-			(function($) {
-			mui.init({
-				pullRefresh: {
-					container: '#pullrefresh',
-					up: {
-						contentrefresh: '正在加载...',
-						callback: pullupRefresh
 					}
+				});
+				
+				var count = 0;
+				var pageStart = 0;
+				/**
+				 * 上拉加载具体业务实现
+				 */
+				function pullupRefresh() {
+					setTimeout(function() {
+						searchBlood();
+					}, 1500);
 				}
-			});
-			
-			var count = 0;
-			var pageStart = 0;
-			/**
-			 * 上拉加载具体业务实现
-			 */
-			function pullupRefresh() {
-				setTimeout(function() {
+				
+				
+				mui.plusReady(function() {
+						
+					plus.nativeUI.showWaiting("正在加载");
+					// 数据加载
+					addBtnEventListner();
 					searchBlood();
-				}, 1500);
-			}
-			
-			
-			mui.plusReady(function() {
-					
-				plus.nativeUI.showWaiting("正在加载");
-				// 数据加载
-				addBtnEventListner();
-				//searchBlood();
-					
-				// 加载完成
-				plus.nativeUI.closeWaiting();
-
-			});
-				
-				//添加按钮监听
-				function addBtnEventListner() {
-					
-					var searchFlag = 0;
-					// 一页加载10条记录
-					var pageSize = 10;
-					
-					// 提交
-					document.getElementById("search").addEventListener("tap", function() {
-			
-
-//						if(0 == searchFlag){
-//						var blooddiv=document.getElementById("item1");
-//						
-//						var pullrefresh = '<div class="mui-input-group" id="pullrefresh">';
-//						pullrefresh = pullrefresh + '<div class="div-td">';
-//						pullrefresh = pullrefresh + '<table class="mui-table-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0">';
-//						pullrefresh = pullrefresh + '<tr><th>日期</th><th>收缩压</th><th>舒张压</th><th>脉率</th></tr>';
-//						pullrefresh = pullrefresh + '</table></div></div>';
-//						
-//						blooddiv.innerHTML = pullrefresh;
-
-							// 血压结果检索
-							searchBlood(plus);
-						}else{
-							// 心电结果检索
-							searchEtc(plus);
-						}
 						
-					}, false);
+					// 加载完成
+					plus.nativeUI.closeWaiting();
+	
+				});
 					
-					// 血压
-					document.getElementById("blood").addEventListener("tap", function() {
-			
-						// 设置查询flag
-						searchFlag = "0";		
-					}, false);
-					
-					// 心脏
-					document.getElementById("etc").addEventListener("tap", function() {
-			
-						// 设置查询flag
-						searchFlag = "1";		
-					}, false);
-					
-				} 
-				
-				var searchBlood = function(){
-					//var patientId = localStorage.getItem("patientID");
-					var patientId = '1';
-					var startDate = document.getElementById("startDate");
-					
-					var endDate = document.getElementById("endDate");
-					console.log(pageStart);
-					//获取设备				
-					mui.ajax(API_ADDRESS + 'historyAction/queryBloodPressureList.do', {
-						//当前patientid
+					//添加按钮监听
+					function addBtnEventListner() {
 						
-						data: {
-							pointerStart: pageStart,
-							pageSize: '10',
-							patientId:patientId,
-							startDate:startDate.value,
-							endDate:endDate.value
-						},
-						dataType: 'json', //服务器返回json格式数据
-						type: 'post', //HTTP请求类型
-						timeout: 50000, //超时时间设置为10秒；
-						success: function(data) {
-							var bloodeList = data.result.outBeanList;
-							// 数据总条数
-							var total = data.result.recordTotal;
-							
-							var table = document.body.querySelector('.mui-table-etc');
-							
-							var cells = document.body.querySelectorAll('.blood-td');
-							
-							for (var i = 0;i < bloodeList.length; i++) {
-								var tr = document.createElement('tr');
-								if('Danger'==bloodeList[i].state){
-									tr.className = 'blood-td-denger';
-								}else{
-									tr.className = 'blood-td';
-								}
-								
-								tr.innerHTML = '<td>'+bloodeList[i].takeTime+'</td><td>'+bloodeList[i].shrink+'</td><td>'+bloodeList[i].diastole+'</td><td>'+bloodeList[i].pressureValue+'</td>';
-								table.appendChild(tr);
-								count ++;
-								
-							}
-							
-					
-							pageStart = pageStart + 10;
-							console.log("success");
-							console.log(pageStart);
-							console.log(count);
-							mui('#pullrefresh').pullRefresh().endPullupToRefresh(count >= total); //参数为true代表没有更多数据了
-						},
-						error: function(xhr, type, errorThrown) {
-							//异常处理；
-							console.log("failure");
-							console.log(type);
-							//return callback('用户名或密码错误');
-						}
-					});
-				}
-				
-				
-				// 开始日期
-				document.getElementById('startDate').addEventListener('tap',function(){
-					
-					var optionsJson = this.getAttribute('data-options') || '{}';
-					var options = JSON.parse(optionsJson);
+						var searchFlag = 0;
+						// 一页加载10条记录
+						var pageSize = 10;
 						
-					// 日期设定
-					setdate(options,startDate);
-					
-				},false);
+						// 提交
+						document.getElementById("search").addEventListener("tap", function() {
 				
-				// 结束日期
-				document.getElementById('endDate').addEventListener('tap',function(){
-					
-					var optionsJson = this.getAttribute('data-options') || '{}';
-					var options = JSON.parse(optionsJson);
-						
-					// 日期设定
-					setdate(options,endDate);
-				},false);
-				
-				
-				
-				// 日期设定
-				var setdate = function(options,selectDate){
-						
-						/*
-						 * 首次显示时实例化组件
-						 * 示例为了简洁，将 options 放在了按钮的 dom 上
-						 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
-						 */
-						var picker = new $.DtPicker(options);
-						picker.show(function(rs) {
-							/*
-							 * rs.value 拼合后的 value
-							 * rs.text 拼合后的 text
-							 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
-							 * rs.m 月，用法同年
-							 * rs.d 日，用法同年
-							 * rs.h 时，用法同年
-							 * rs.i 分（minutes 的第二个字母），用法同年
-							 */
-							selectDate.value = rs.text;
-							
 							// 条件变更  记录数重置
 							count = 0;
-							/* 
-							 * 返回 false 可以阻止选择框的关闭
-							 * return false;
-							 */
-							/*
-							 * 释放组件资源，释放后将将不能再操作组件
-							 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
-							 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
-							 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
-							 */
-							picker.dispose();
-						});	
+							pageStart = 0;
+							var table = document.body.querySelector('.mui-table-etc');
+							var paras = document.getElementsByClassName("blood-td");
+							var paras2 = document.getElementsByClassName("blood-td-denger");
+							//通过class获取元素
+							for(var i=paras.length-1;i>=0;i--){
+								console.log(i)
+								if (paras[i] != null) {
+									table.removeChild(paras[i]);
+									console.log(i + "remove")
+								}
+							}
+	
+							
+							//通过class获取元素
+							for(var i=paras2.length-1;i>=0;i--){
+								if (paras2[i] != null) {
+									table.removeChild(paras2[i]);
+									alert(i+"paras2");
+								}
+							}
+	
+	
+							if(0 == searchFlag){
+	
+								// 血压结果检索
+								searchBlood(plus);
+							}else{
+								// 心电结果检索
+								searchEtc(plus);
+							}
+							
+						}, false);
+						
+						// 血压
+						document.getElementById("blood").addEventListener("tap", function() {
+				
+							// 设置查询flag
+							searchFlag = "0";		
+						}, false);
+						
+						// 心脏
+						document.getElementById("etc").addEventListener("tap", function() {
+				
+							// 设置查询flag
+							searchFlag = "1";		
+						}, false);
+						
+					} 
 					
-				}
-			})(mui);
-		</script>
+					var searchBlood = function(){
+						//var patientId = localStorage.getItem("patientID");
+						var patientId = '1';
+						var startDate = document.getElementById("startDate");
+						
+						var endDate = document.getElementById("endDate");
+						console.log(pageStart);
+						//获取设备				
+						mui.ajax(API_ADDRESS + 'historyAction/queryBloodPressureList.do', {
+							//当前patientid
+							
+							data: {
+								pointerStart: pageStart,
+								pageSize: '10',
+								patientId:patientId,
+								startDate:startDate.value,
+								endDate:endDate.value
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'post', //HTTP请求类型
+							timeout: 50000, //超时时间设置为10秒；
+							success: function(data) {
+								var bloodeList = data.result.outBeanList;
+								// 数据总条数
+								var total = data.result.recordTotal;
+								var table = document.body.querySelector('.mui-table-etc');
+								var cells = document.body.querySelectorAll('.blood-td');
+								
+								for (var i = 0;i < bloodeList.length; i++) {
+									var tr = document.createElement('tr');
+									if('Normal'==bloodeList[i].state){
+										tr.className = 'blood-td';
+									}else{
+										tr.className = 'blood-td-denger';
+									}
+									tr.id = "blood-td";
+									tr.innerHTML = '<td>'+bloodeList[i].takeTime+'</td><td>'+bloodeList[i].shrink+'</td><td>'+bloodeList[i].diastole+'</td><td>'+bloodeList[i].pressureValue+'</td>';
+									table.appendChild(tr);
+									count ++;
+									
+								}
+						
+								pageStart = pageStart + 10;
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh(count >= total); //参数为true代表没有更多数据了
+								
+							},
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+								console.log("failure");
+								console.log(type);
+								//return callback('用户名或密码错误');
+							}
+						});
+					}
+					
+					
+					// 开始日期
+					document.getElementById('startDate').addEventListener('tap',function(){
+						
+						var optionsJson = this.getAttribute('data-options') || '{}';
+						var options = JSON.parse(optionsJson);
+							
+						// 日期设定
+						setdate(options,startDate);
+						
+					},false);
+					
+					// 结束日期
+					document.getElementById('endDate').addEventListener('tap',function(){
+						
+						var optionsJson = this.getAttribute('data-options') || '{}';
+						var options = JSON.parse(optionsJson);
+							
+						// 日期设定
+						setdate(options,endDate);
+					},false);
+					
+					
+					
+					// 日期设定
+					var setdate = function(options,selectDate){
+							
+							/*
+							 * 首次显示时实例化组件
+							 * 示例为了简洁，将 options 放在了按钮的 dom 上
+							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+							 */
+							var picker = new $.DtPicker(options);
+							picker.show(function(rs) {
+								/*
+								 * rs.value 拼合后的 value
+								 * rs.text 拼合后的 text
+								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+								 * rs.m 月，用法同年
+								 * rs.d 日，用法同年
+								 * rs.h 时，用法同年
+								 * rs.i 分（minutes 的第二个字母），用法同年
+								 */
+								selectDate.value = rs.text;
+								
+								/* 
+								 * 返回 false 可以阻止选择框的关闭
+								 * return false;
+								 */
+								/*
+								 * 释放组件资源，释放后将将不能再操作组件
+								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+								 */
+								picker.dispose();
+							});	
+						
+					}
+				})(mui);
+			</script>
 
 	</body>
 

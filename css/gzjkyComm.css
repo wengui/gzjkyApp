@@ -26,3 +26,33 @@ table.mui-table-etc td {
 	border-color: #EFEFF4;
 	border-bottom-width: 1px;
 }
+
+table.mui-table-blood-etc th {
+	border-width: 0px;
+	font-size: 15px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #F8F8F8;
+	background-color: #E0E0E0;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+}
+
+table.mui-table-blood-etc td {
+	border-width: 0px;
+	padding: 8px;
+	border-style: solid;
+	border-color: #EFEFF4;
+	border-bottom-width: 1px;
+}
+
+.blood-td {
+	text-align: center;
+	font-size: 15px;
+}
+
+.blood-td-denger {
+	color: red;
+	text-align: center;
+	font-size: 15px;
+}
