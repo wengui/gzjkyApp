@@ -21,11 +21,98 @@
 		</style>
 
 		<style type="text/css">
-			.oddrowcolor{
-				background-color:#d4e3e5;
+			.oddrowcolor {
+				background-color: #d4e3e5;
 			}
-			.evenrowcolor{
-				background-color:#c3dde0;
+			
+			.evenrowcolor {
+				background-color: #c3dde0;
+			}
+		</style>
+		<style>
+			html,
+			body {
+				background-color: #efeff4;
+			}
+			
+			.mui-bar~.mui-content .mui-fullscreen {
+				top: 44px;
+				height: auto;
+			}
+			
+			.mui-pull-top-tips {
+				position: absolute;
+				top: -20px;
+				left: 50%;
+				margin-left: -25px;
+				width: 40px;
+				height: 40px;
+				border-radius: 100%;
+				z-index: 1;
+			}
+			
+			.mui-bar~.mui-pull-top-tips {
+				top: 24px;
+			}
+			
+			.mui-pull-top-wrapper {
+				width: 42px;
+				height: 42px;
+				display: block;
+				text-align: center;
+				background-color: #efeff4;
+				border: 1px solid #ddd;
+				border-radius: 25px;
+				background-clip: padding-box;
+				box-shadow: 0 4px 10px #bbb;
+				overflow: hidden;
+			}
+			
+			.mui-pull-top-tips.mui-transitioning {
+				-webkit-transition-duration: 200ms;
+				transition-duration: 200ms;
+			}
+			
+			.mui-pull-top-tips .mui-pull-loading {
+				/*-webkit-backface-visibility: hidden;
+				-webkit-transition-duration: 400ms;
+				transition-duration: 400ms;*/
+				margin: 0;
+			}
+			
+			.mui-pull-top-wrapper .mui-icon,
+			.mui-pull-top-wrapper .mui-spinner {
+				margin-top: 7px;
+			}
+			
+			.mui-pull-top-wrapper .mui-icon.mui-reverse {
+				/*-webkit-transform: rotate(180deg) translateZ(0);*/
+			}
+			
+			.mui-pull-bottom-tips {
+				text-align: center;
+				background-color: #efeff4;
+				font-size: 15px;
+				line-height: 40px;
+				color: #777;
+			}
+			
+			.mui-pull-top-canvas {
+				overflow: hidden;
+				background-color: #fafafa;
+				border-radius: 40px;
+				box-shadow: 0 4px 10px #bbb;
+				width: 40px;
+				height: 40px;
+				margin: 0 auto;
+			}
+			
+			.mui-pull-top-canvas canvas {
+				width: 40px;
+			}
+			
+			.mui-slider-indicator.mui-segmented-control {
+				background-color: #efeff4;
 			}
 		</style>
 	</head>
@@ -58,10 +145,10 @@
 					<input id="search" type="button" value="查询" class="btn mui-btn mui-btn-green" style="width: 95%;margin-left: 8px;background-color: green;">
 				</div>
 			</div>
-			<div>
+			<div class="mui-slider-group">
 				<div id="item1" class="mui-control-content mui-active">
-					<div class="mui-input-group" id="pullrefresh">
-						<div class="div-td">
+					<div class="mui-input-group pullrefresh mui-scroll-wrapper" id="pullrefresh">
+						<div class="div-td mui-scroll">
 							<table class="mui-table-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0">
 								<tr>
 									<th>日期</th>
@@ -74,8 +161,8 @@
 					</div>
 				</div>
 				<div id="item2" class="mui-control-content">
-					<div class="mui-input-group" id="pulletcrefresh">
-						<div class="div-td">
+					<div class="mui-input-group pullrefresh mui-scroll-wrapper" id="pulletcrefresh">
+						<div class="div-td mui-scroll">
 							<table class="mui-table-blood-etc" id="alternatecolor" width="100%" border="0" cellspacing="1" cellpadding="0">
 								<tr>
 									<th>日期</th>
@@ -91,123 +178,96 @@
 			<script src="../js/mui.min.js"></script>
 			<script src="../js/mui.picker.min.js"></script>
 			<script type="text/javascript" src="../js/views/app.js"></script>
+			<script src="../js/mui.pullToRefresh.js"></script>
+			<script src="../js/mui.pullToRefresh.material.js"></script>
+			<script src="../js/mui.zoom.js"></script>
+			<script src="../js/mui.previewimage.js"></script>
+			<script>
+				mui.previewImage();
+			</script>
 			<script>
 				(function($) {
-				mui.init({
-					pullRefresh: {
-						container: '#pullrefresh',
-						up: {
-							contentrefresh: '正在加载...',
-							callback: pullupRefresh
-						}
-						
-
-					}
-				});
-				
-				var count = 0;
-				var pageStart = 0;
-				/**
-				 * 上拉加载具体业务实现
-				 */
-				function pullupRefresh() {
-					setTimeout(function() {
+					mui.init();
+					var count = 0;
+					var pageStart = 0;
+					var total = 0;
+					var searchFlag = 0;
+					mui.plusReady(function() {
+						//循环初始化所有下拉刷新，上拉加载。
+						$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+							$(pullRefreshEl).pullToRefresh({
+								up: {
+									callback: function() {
+										var self = this;
+										setTimeout(function() {
+											var ul = self.element.querySelector('.pullrefresh');
+											if (0 == searchFlag) {
+												searchBlood();
+											} else {
+												searchEtc();
+											}
+											self.endPullUpToRefresh(count >= total);
+										}, 1000);
+									}
+								}
+							});
+						});
+						plus.nativeUI.showWaiting("正在加载");
+						// 数据加载
+						addBtnEventListner();
 						searchBlood();
-					}, 1500);
-				}
-				
-				
-				mui.plusReady(function() {
-						
-					plus.nativeUI.showWaiting("正在加载");
-					// 数据加载
-					addBtnEventListner();
-					searchBlood();
-						
-					// 加载完成
-					plus.nativeUI.closeWaiting();
-	
-				});
+						// 加载完成
+						plus.nativeUI.closeWaiting();
+					});
 					
 					//添加按钮监听
 					function addBtnEventListner() {
-						
-						var searchFlag = 0;
 						// 一页加载10条记录
 						var pageSize = 10;
-						
 						// 提交
 						document.getElementById("search").addEventListener("tap", function() {
-				
+							mui('.pullrefresh').pullRefresh().refresh(true);
+							//self.refresh(true);
 							// 条件变更  记录数重置
 							count = 0;
 							pageStart = 0;
-							var table = document.body.querySelector('.mui-table-etc');
-							var paras = document.getElementsByClassName("blood-td");
-							var paras2 = document.getElementsByClassName("blood-td-denger");
-							//通过class获取元素
-							for(var i=paras.length-1;i>=0;i--){
-								console.log(i)
-								if (paras[i] != null) {
-									table.removeChild(paras[i]);
-									console.log(i + "remove")
-								}
-							}
-	
-							
-							//通过class获取元素
-							for(var i=paras2.length-1;i>=0;i--){
-								if (paras2[i] != null) {
-									table.removeChild(paras2[i]);
-									alert(i+"paras2");
-								}
-							}
-	
-	
-							if(0 == searchFlag){
-	
-								// 血压结果检索
-								searchBlood(plus);
-							}else{
+							if (0 == searchFlag) {
+								// 血壓查詢
+								getBloodList();
+							} else {
 								// 心电结果检索
-								searchEtc(plus);
+								getEtcList();
 							}
-							
 						}, false);
-						
 						// 血压
 						document.getElementById("blood").addEventListener("tap", function() {
-				
 							// 设置查询flag
-							searchFlag = "0";		
+							searchFlag = "0";
+							getBloodList();
 						}, false);
-						
 						// 心脏
 						document.getElementById("etc").addEventListener("tap", function() {
-				
 							// 设置查询flag
-							searchFlag = "1";		
+							searchFlag = "1";
+							getEtcList();
+							
 						}, false);
-						
-					} 
-					
-					var searchBlood = function(){
+					}
+					var searchBlood = function() {
 						//var patientId = localStorage.getItem("patientID");
 						var patientId = '1';
 						var startDate = document.getElementById("startDate");
-						
 						var endDate = document.getElementById("endDate");
 						console.log(pageStart);
 						//获取设备				
 						mui.ajax(API_ADDRESS + 'historyAction/queryBloodPressureList.do', {
 							//当前patientid
-							
 							data: {
 								pointerStart: pageStart,
 								pageSize: '10',
-								patientId:patientId,
-								startDate:startDate.value,
-								endDate:endDate.value
+								patientId: patientId,
+								startDate: startDate.value,
+								endDate: endDate.value
 							},
 							dataType: 'json', //服务器返回json格式数据
 							type: 'post', //HTTP请求类型
@@ -215,27 +275,23 @@
 							success: function(data) {
 								var bloodeList = data.result.outBeanList;
 								// 数据总条数
-								var total = data.result.recordTotal;
+								total = data.result.recordTotal;
 								var table = document.body.querySelector('.mui-table-etc');
 								var cells = document.body.querySelectorAll('.blood-td');
-								
-								for (var i = 0;i < bloodeList.length; i++) {
+								for (var i = 0; i < bloodeList.length; i++) {
 									var tr = document.createElement('tr');
-									if('Normal'==bloodeList[i].state){
+									if ('Normal' == bloodeList[i].state) {
 										tr.className = 'blood-td';
-									}else{
+									} else {
 										tr.className = 'blood-td-denger';
 									}
 									tr.id = "blood-td";
-									tr.innerHTML = '<td>'+bloodeList[i].takeTime+'</td><td>'+bloodeList[i].shrink+'</td><td>'+bloodeList[i].diastole+'</td><td>'+bloodeList[i].pressureValue+'</td>';
+									tr.innerHTML = '<td>' + bloodeList[i].takeTime + '</td><td>' + bloodeList[i].shrink + '</td><td>' + bloodeList[i].diastole + '</td><td>' + bloodeList[i].pressureValue + '</td>';
 									table.appendChild(tr);
-									count ++;
-									
+									count++;
 								}
-						
 								pageStart = pageStart + 10;
-								mui('#pullrefresh').pullRefresh().endPullupToRefresh(count >= total); //参数为true代表没有更多数据了
-								
+								mui('#pullrefresh').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了
 							},
 							error: function(xhr, type, errorThrown) {
 								//异常处理；
@@ -245,65 +301,150 @@
 							}
 						});
 					}
-					
-					
-					// 开始日期
-					document.getElementById('startDate').addEventListener('tap',function(){
-						
-						var optionsJson = this.getAttribute('data-options') || '{}';
-						var options = JSON.parse(optionsJson);
-							
-						// 日期设定
-						setdate(options,startDate);
-						
-					},false);
-					
-					// 结束日期
-					document.getElementById('endDate').addEventListener('tap',function(){
-						
-						var optionsJson = this.getAttribute('data-options') || '{}';
-						var options = JSON.parse(optionsJson);
-							
-						// 日期设定
-						setdate(options,endDate);
-					},false);
-					
-					
-					
-					// 日期设定
-					var setdate = function(options,selectDate){
-							
-							/*
-							 * 首次显示时实例化组件
-							 * 示例为了简洁，将 options 放在了按钮的 dom 上
-							 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
-							 */
-							var picker = new $.DtPicker(options);
-							picker.show(function(rs) {
-								/*
-								 * rs.value 拼合后的 value
-								 * rs.text 拼合后的 text
-								 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
-								 * rs.m 月，用法同年
-								 * rs.d 日，用法同年
-								 * rs.h 时，用法同年
-								 * rs.i 分（minutes 的第二个字母），用法同年
-								 */
-								selectDate.value = rs.text;
+					var searchEtc = function() {
+						var hly_url=  "http://gzjky.sh-sdhr.com/upload/Electrocardiograms/";
+						//var patientId = localStorage.getItem("patientID");
+						var patientId = '1';
+						var startDate = document.getElementById("startDate");
+						var endDate = document.getElementById("endDate");
+						console.log(pageStart);
+						//获取设备				
+						mui.ajax(API_ADDRESS + 'historyAction/queryEcgList.do', {
+							//当前patientid
+							data: {
+								pointerStart: pageStart,
+								pageSize: '10',
+								patientId: patientId,
+								startDate: startDate.value,
+								endDate: endDate.value
+							},
+							dataType: 'json', //服务器返回json格式数据
+							type: 'post', //HTTP请求类型
+							timeout: 50000, //超时时间设置为10秒；
+							success: function(data) {
+								var etcList = data.result.outBeanList;
 								
-								/* 
-								 * 返回 false 可以阻止选择框的关闭
-								 * return false;
-								 */
-								/*
-								 * 释放组件资源，释放后将将不能再操作组件
-								 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
-								 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
-								 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
-								 */
-								picker.dispose();
-							});	
-						
+								// 数据总条数
+								total = data.result.recordTotal;
+								var table = document.body.querySelector('.mui-table-blood-etc');
+								var cells = document.body.querySelectorAll('.etc-td');
+								for (var i = 0; i < etcList.length; i++) {
+									var tr = document.createElement('tr');
+									if ('Normal' == etcList[i].state) {
+										tr.className = 'etc-td';
+									} else {
+										tr.className = 'etc-td-denger';
+									}
+									tr.id = "blood-td";
+									var imagesrc = hly_url+etcList[i].imageUrl.replace("~/upload/Electrocardiograms/","")
+									tr.innerHTML = '<td>' + etcList[i].takeTime + '</td><td>' + etcList[i].heartRate + '</td><td>' + etcList[i].timeLength + '</td><td><p><img id="ecgImage" class="mui-media-object mui-pull-left" data-preview-src="" data-preview-group="1" src="' + imagesrc + '"/></p></td>';
+									table.appendChild(tr);
+									count++;
+								}
+								pageStart = pageStart + 10;
+								mui('.pullrefresh').pullRefresh().endPullupToRefresh(); //参数为true代表没有更多数据了
+							},
+							error: function(xhr, type, errorThrown) {
+								//异常处理；
+								console.log("failure");
+								console.log(type);
+								//return callback('用户名或密码错误');
+							}
+						});
+					}
+					var getBloodList = function() {
+						count = 0;
+						pageStart = 0;
+						// 删除之前页面的数据，从新加载
+						var table = document.body.querySelector('.mui-table-etc');
+						var paras = document.getElementsByClassName("blood-td");
+						var paras2 = document.getElementsByClassName("blood-td-denger");
+						//通过class获取元素
+						for (var i = paras.length - 1; i >= 0; i--) {
+							console.log(i)
+							if (paras[i] != null) {
+								table.removeChild(paras[i]);
+								console.log(i + "remove")
+							}
+						}
+						//通过class获取元素
+						for (var i = paras2.length - 1; i >= 0; i--) {
+							if (paras2[i] != null) {
+								table.removeChild(paras2[i]);
+							}
+						}
+						//查詢血壓值
+						searchBlood();
+					};
+					var getEtcList = function() {
+						count = 0;
+						pageStart = 0;
+						// 删除之前页面的数据，从新加载
+						var table = document.body.querySelector('.mui-table-blood-etc');
+						var paras = document.getElementsByClassName("etc-td");
+						var paras2 = document.getElementsByClassName("etc-td-denger");
+						//通过class获取元素
+						for (var i = paras.length - 1; i >= 0; i--) {
+							console.log(i)
+							if (paras[i] != null) {
+								table.removeChild(paras[i]);
+								console.log(i + "remove")
+							}
+						}
+						//通过class获取元素
+						for (var i = paras2.length - 1; i >= 0; i--) {
+							if (paras2[i] != null) {
+								table.removeChild(paras2[i]);
+							}
+						}
+						//查詢血壓值
+						searchEtc();
+					};
+					// 开始日期
+					document.getElementById('startDate').addEventListener('tap', function() {
+						var optionsJson = this.getAttribute('data-options') || '{}';
+						var options = JSON.parse(optionsJson);
+						// 日期设定
+						setdate(options, startDate);
+					}, false);
+					// 结束日期
+					document.getElementById('endDate').addEventListener('tap', function() {
+						var optionsJson = this.getAttribute('data-options') || '{}';
+						var options = JSON.parse(optionsJson);
+						// 日期设定
+						setdate(options, endDate);
+					}, false);
+					// 日期设定
+					var setdate = function(options, selectDate) {
+						/*
+						 * 首次显示时实例化组件
+						 * 示例为了简洁，将 options 放在了按钮的 dom 上
+						 * 也可以直接通过代码声明 optinos 用于实例化 DtPicker
+						 */
+						var picker = new $.DtPicker(options);
+						picker.show(function(rs) {
+							/*
+							 * rs.value 拼合后的 value
+							 * rs.text 拼合后的 text
+							 * rs.y 年，可以通过 rs.y.vaue 和 rs.y.text 获取值和文本
+							 * rs.m 月，用法同年
+							 * rs.d 日，用法同年
+							 * rs.h 时，用法同年
+							 * rs.i 分（minutes 的第二个字母），用法同年
+							 */
+							selectDate.value = rs.text;
+							/* 
+							 * 返回 false 可以阻止选择框的关闭
+							 * return false;
+							 */
+							/*
+							 * 释放组件资源，释放后将将不能再操作组件
+							 * 通常情况下，不需要示放组件，new DtPicker(options) 后，可以一直使用。
+							 * 当前示例，因为内容较多，如不进行资原释放，在某些设备上会较慢。
+							 * 所以每次用完便立即调用 dispose 进行释放，下次用时再创建新实例。
+							 */
+							picker.dispose();
+						});
 					}
 				})(mui);
 			</script>
